@@ -1,0 +1,2416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarfraz Alam - 11-Section Advanced Master Resume Builder</title>
+    <!-- HTML2PDF CDN for Direct Folder PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 15px;
+            max-width: 1850px;
+            height: 100vh;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        /* 100vh INDEPENDENT SCROLL PANELS */
+        .editor-panel {
+            flex: 1.25;
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            height: 100%;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .preview-wrapper {
+            flex: 1.35;
+            height: 100%;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            background: #334155;
+            border-radius: 8px;
+            padding: 20px 10px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .preview-panel {
+            background: #ffffff;
+            padding: 12mm 14mm;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 210mm;
+            min-height: 297mm;
+            color: #334155;
+            margin: 0 auto;
+            align-self: flex-start;
+            transform-origin: top center;
+            transition: transform 0.2s ease, padding 0.2s ease;
+        }
+
+        .builder-section {
+            background: #334155;
+            border: 1px solid #475569;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            transition: border-color 0.25s, box-shadow 0.25s, background-color 0.25s;
+        }
+
+        .builder-section.active-section {
+            border-color: #38bdf8 !important;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
+            background-color: #243248;
+        }
+
+        .builder-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #475569;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+        }
+
+        .builder-section-header h3 {
+            margin: 0;
+            font-size: 0.88rem;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sec-switcher-mini {
+            background: #0f172a;
+            color: #facc15;
+            border: 1px solid #64748b;
+            font-size: 0.68rem;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-toggle-sec {
+            background: #0284c7;
+            color: #fff;
+            border: none;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.68rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .section-body {
+            transition: all 0.3s ease;
+        }
+
+        .section-body.minimized {
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 6px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            font-size: 0.7rem;
+            margin-bottom: 2px;
+            color: #cbd5e1;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 5px;
+            background: #0f172a;
+            color: #fff;
+            border: 1px solid #64748b;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            box-sizing: border-box;
+        }
+
+        input[type="color"] {
+            height: 28px;
+            padding: 1px 2px;
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 45px;
+        }
+
+        .row {
+            display: flex;
+            gap: 6px;
+        }
+
+        .row .form-group {
+            flex: 1;
+        }
+
+        .btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.75rem;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-success {
+            background-color: #16a34a;
+            width: 100%;
+            padding: 10px;
+            font-size: 0.9rem;
+            margin-top: 6px;
+        }
+
+        .btn-success:hover {
+            background-color: #15803d;
+        }
+
+        .btn-danger {
+            background-color: #dc2626;
+            padding: 3px 6px;
+            font-size: 0.7rem;
+        }
+
+        .btn-purple {
+            background-color: #8b5cf6;
+        }
+
+        .btn-purple:hover {
+            background-color: #7c3aed;
+        }
+
+        /* ==================== FOLDER & PDF EXPORT BOX ==================== */
+        .folder-save-box {
+            background: #0c1a2e;
+            border: 1px solid #0284c7;
+            border-radius: 6px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .folder-path-display {
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #38bdf8;
+            background: #090e17;
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #1e293b;
+            word-break: break-all;
+            margin-top: 4px;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.68rem;
+            margin-top: 6px;
+        }
+
+        .history-table th,
+        .history-table td {
+            border: 1px solid #334155;
+            padding: 4px;
+            text-align: left;
+        }
+
+        .history-table th {
+            background: #1e293b;
+            color: #93c5fd;
+        }
+
+        /* ==================== AI CONTROLS PANEL ==================== */
+        .ai-tab-container {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .ai-tab-btn {
+            flex: 1;
+            padding: 6px;
+            background: #1e293b;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.72rem;
+            font-weight: bold;
+        }
+
+        .ai-tab-btn.active {
+            background: #0284c7;
+            color: #fff;
+            border-color: #38bdf8;
+        }
+
+        .ai-tab-content {
+            display: none;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 5px;
+            padding: 8px;
+        }
+
+        .ai-tab-content.active {
+            display: block;
+        }
+
+        /* ==================== COLLAPSIBLE EDITING TOOLS ==================== */
+        details.tool-dropdown {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 5px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+            overflow: hidden;
+        }
+
+        details.tool-dropdown summary {
+            padding: 5px 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: #38bdf8;
+            cursor: pointer;
+            user-select: none;
+            background: #162032;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        details.tool-dropdown summary:hover {
+            background: #1e293b;
+            color: #7dd3fc;
+        }
+
+        details.tool-dropdown .tool-dropdown-content {
+            padding: 8px;
+            border-top: 1px solid #1e293b;
+        }
+
+        /* ==================== EXCEL SKILLS GRID ==================== */
+        .excel-grid-box {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 6px;
+        }
+
+        .excel-grid-head {
+            display: grid;
+            grid-template-columns: 43% 51% 6%;
+            gap: 6px;
+            font-size: 0.7rem;
+            color: #93c5fd;
+            font-weight: bold;
+            margin-bottom: 6px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 3px;
+        }
+
+        .excel-row {
+            display: grid;
+            grid-template-columns: 43% 51% 6%;
+            gap: 6px;
+            margin-bottom: 4px;
+            align-items: center;
+        }
+
+        .excel-row-num {
+            font-size: 0.65rem;
+            color: #64748b;
+            text-align: center;
+        }
+
+        /* ==================== PREVIEW STYLING (PAGE BREAK & MARGIN ENGINE) ==================== */
+        #resume-preview {
+            --global-font: 'Times New Roman', Times, serif;
+            --sec-title-size: 14px;
+            --item-title-size: 13.2px;
+            --meta-title-size: 12.8px;
+            --global-body-size: 14.5px;
+            --sec-title-color: #000000;
+            --sec-line-color: #1d4ed8;
+            --sec-line-height: 1.2px;
+            --sec-margin-top: 7px;
+            --sec-margin-bottom: 3px;
+
+            --bullet-indent: 10px;
+            --bullet-text-indent: -10px;
+            --bullet-margin-bottom: 2px;
+            --line-height: 1.43;
+            --letter-spacing: 0px;
+
+            font-family: var(--global-font);
+        }
+
+        .resume-name {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .resume-subheader {
+            font-weight: bold;
+            margin: 2px 0 4px 0;
+        }
+
+        .resume-contact {
+            border-bottom: 1px solid #94a3b8;
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+            line-height: 1.35;
+        }
+
+        .sec-title {
+            font-weight: bold;
+            font-size: var(--sec-title-size);
+            color: var(--sec-title-color);
+            border-bottom: var(--sec-line-height) solid var(--sec-line-color);
+            padding-bottom: 1px;
+            margin-top: var(--sec-margin-top);
+            margin-bottom: var(--sec-margin-bottom);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
+        }
+
+        .resume-bullet {
+            line-height: var(--line-height);
+            letter-spacing: var(--letter-spacing);
+            padding-left: var(--bullet-indent);
+            text-indent: var(--bullet-text-indent);
+            margin-bottom: var(--bullet-margin-bottom);
+            font-size: var(--global-body-size);
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        .skill-row {
+            line-height: var(--line-height);
+            margin-bottom: 3px;
+            display: flex;
+            align-items: baseline;
+            font-size: var(--global-body-size);
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        /* नो-ब्रेक ग्रुप: हेडर और कंटेंट कभी अलग-अलग पेज पर नहीं टूटेंगे */
+        .no-break-group {
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            margin-bottom: 6px;
+        }
+
+        .project-item,
+        .exp-item {
+            margin-bottom: 5px;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+        }
+
+        .resume-contact a {
+            color: inherit;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .resume-contact a:hover {
+            color: #1d4ed8;
+        }
+
+        /* प्रिंट के दौरान हर पेज पर बराबर मार्जिन के लिए */
+        @page {
+            size: A4 portrait;
+            margin: 12mm 14mm 12mm 14mm;
+        }
+
+        @media print {
+
+            html,
+            body {
+                overflow: visible !important;
+                height: auto !important;
+                background: none;
+                padding: 0;
+                color: #000;
+            }
+
+            .main-container {
+                display: block;
+                height: auto;
+                padding: 0;
+                margin: 0;
+            }
+
+            .editor-panel {
+                display: none !important;
+            }
+
+            .preview-wrapper {
+                display: block;
+                height: auto;
+                overflow: visible;
+                padding: 0;
+                background: none;
+            }
+
+            .preview-panel {
+                box-shadow: none;
+                margin: 0;
+                width: 100% !important;
+                transform: none !important;
+                min-height: auto;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="main-container">
+        <!-- ==================== LEFT: EDITOR PANEL (100vh) ==================== -->
+        <div class="editor-panel" id="editor-scroller">
+            <h2 style="color:#38bdf8; margin-top:0; font-size:1.05rem;">🛠️ Advanced Master Resume Builder (11 Sections)
+            </h2>
+
+            <!-- MASTER PRESET SWITCHER -->
+            <div class="builder-section" style="background:#0284c7;" id="sec-switcher">
+                <div class="builder-section-header">
+                    <h3 style="color:#fff; border:none; padding:0; margin:0;">🎛️ Master Profile Switcher (सभी 11
+                        सेक्शन्स एक साथ बदलें)</h3>
+                </div>
+                <select id="preset-sel" onchange="loadMasterPreset(this.value)"
+                    style="background:#fff; color:#000; font-weight:bold;">
+                    <option value="fullstack">1. Full-Stack Developer</option>
+                    <option value="sap">2. SAP Consultant</option>
+                    <option value="techsupport">3. Tech Support Executive</option>
+                    <option value="principal">4. School Principal</option>
+                </select>
+            </div>
+
+            <!-- DIRECT FOLDER EXPORT & TIMESTAMP VERSIONING -->
+            <div class="folder-save-box">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:bold; color:#facc15; font-size:0.75rem;">📁 Auto-Save to Target Folder &
+                        Versioning</span>
+                    <button type="button" class="btn" style="background:#0284c7; padding:3px 8px; font-size:0.68rem;"
+                        onclick="linkTargetDirectory()">
+                        📂 Link Target Folder
+                    </button>
+                </div>
+                <div class="folder-path-display" id="disp-folder-path">
+                    Target: C:\Users\pione\OneDrive\Desktop\job_assistant\generated_resume\
+                </div>
+                <div class="row" style="margin-top:6px;">
+                    <div class="form-group">
+                        <label>Next Version Counter</label>
+                        <input type="number" id="pdf-version-counter" value="1" min="1"
+                            style="color:#fde047; font-weight:bold;">
+                    </div>
+                    <div class="form-group">
+                        <label>Current Timestamp</label>
+                        <input type="text" id="pdf-live-timestamp" readonly style="color:#94a3b8; font-size:0.7rem;">
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success" onclick="savePdfDirectToFolder()">
+                    💾 Save PDF Direct To Target Folder (Equal Top Margin on All Pages)
+                </button>
+
+                <details class="tool-dropdown" style="margin-top:6px;">
+                    <summary>📜 Export History Log (Saved Versions List) <span>▼</span></summary>
+                    <div class="tool-dropdown-content">
+                        <table class="history-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>File Name</th>
+                                    <th>Saved Date & Time</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-log-body"></tbody>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <!-- DUAL-MODE AI & GEMINI PROMPT -->
+            <div class="builder-section" style="background:#1e1b4b; border-color:#6366f1;" id="sec-ai-autofill">
+                <div class="builder-section-header">
+                    <h3 style="color:#a5b4fc;">🤖 AI Auto-Filler & Gemini Prompt Hub</h3>
+                    <div class="header-actions">
+                        <button type="button" class="btn"
+                            style="background:#4338ca; padding:2px 6px; font-size:0.68rem;"
+                            onclick="copyGeminiMasterPrompt()">
+                            📋 Copy Gemini Prompt
+                        </button>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-ai-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-ai-body">
+                    <div class="ai-tab-container">
+                        <button type="button" class="ai-tab-btn active" id="tab-btn-magic"
+                            onclick="switchAITab('magic')">
+                            📋 Mode 1: Paste Text / Gemini (100% Free - No JSON Needed!)
+                        </button>
+                        <button type="button" class="ai-tab-btn" id="tab-btn-api" onclick="switchAITab('api')">
+                            ⚡ Mode 2: Direct AI API (Auto)
+                        </button>
+                    </div>
+
+                    <div class="ai-tab-content active" id="ai-content-magic">
+                        <div class="form-group">
+                            <label style="color:#a5b4fc;">ChatGPT/Gemini या Word से कॉपी किया हुआ पूरा टेक्स्ट यहाँ
+                                पेस्ट करें:</label>
+                            <textarea id="ai-magic-json" style="height:85px;"
+                                placeholder="यहाँ सादा रिज़्यूमे टेक्स्ट पेस्ट करें..."></textarea>
+                        </div>
+                        <button type="button" class="btn"
+                            style="background:#16a34a; width:100%; padding:7px; font-size:0.75rem;"
+                            onclick="smartParseRawTextOrJSON()">
+                            ⚡ Instant Magic Auto-Fill (11 सेक्शन्स खुद-ब-खुद भरें)
+                        </button>
+                    </div>
+
+                    <div class="ai-tab-content" id="ai-content-api">
+                        <div class="row">
+                            <div class="form-group" style="flex:1;">
+                                <label>AI Provider</label>
+                                <select id="ai-provider" onchange="checkSavedKey()">
+                                    <option value="gemini">Google Gemini (Recommended / Free Tier)</option>
+                                    <option value="openai">OpenAI (GPT-4o-mini)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:2;">
+                                <label>Your API Key</label>
+                                <input type="password" id="ai-api-key" placeholder="Paste Gemini or OpenAI API Key..."
+                                    onchange="saveAPIKey()">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-top:4px;">
+                            <label style="color:#fde047;">Paste Raw Job Description (JD):</label>
+                            <textarea id="ai-raw-jd" style="height:60px;" placeholder="Paste raw JD here..."></textarea>
+                        </div>
+                        <button type="button" class="btn btn-purple" id="btn-call-ai" onclick="callDirectAI()"
+                            style="width:100%; padding:7px; font-size:0.75rem;">
+                            ✨ Analyze JD & Auto-Fill All 11 Sections
+                        </button>
+                        <div id="ai-loading-status"
+                            style="font-size:0.7rem; color:#fde047; margin-top:4px; display:none;">
+                            ⏳ AI is processing JD... Please wait...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE MARGINS & LAYOUT FIT (COLLAPSIBLE DROPDOWN) -->
+            <div class="builder-section" id="sec-layout-fit">
+                <div class="builder-section-header">
+                    <h3>📄 Page Layout & Margins (Every Page Control)</h3>
+                    <button type="button" class="btn-toggle-sec"
+                        onclick="toggleSectionBody('sec-layout-body')">Minimize</button>
+                </div>
+                <div class="section-body" id="sec-layout-body">
+                    <details class="tool-dropdown">
+                        <summary>⚙️ Page Layout, Margins & 100% Fit Controls [Click to Open] <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group"><label>Top Margin (mm)</label><input type="number" id="p-mg-top"
+                                        value="12" oninput="applyPageMargins()"></div>
+                                <div class="form-group"><label>Bottom Margin (mm)</label><input type="number"
+                                        id="p-mg-bot" value="12" oninput="applyPageMargins()"></div>
+                                <div class="form-group"><label>Left Margin (mm)</label><input type="number"
+                                        id="p-mg-left" value="14" oninput="applyPageMargins()"></div>
+                                <div class="form-group"><label>Right Margin (mm)</label><input type="number"
+                                        id="p-mg-right" value="14" oninput="applyPageMargins()"></div>
+                            </div>
+                            <div class="row" style="margin-top:4px;">
+                                <div class="form-group">
+                                    <label style="color:#fde047;">Scale / Fit Page (%)</label>
+                                    <input type="number" id="p-scale-val" value="100" min="50" max="150" step="1"
+                                        oninput="applyPageMargins()">
+                                </div>
+                                <div class="form-group">
+                                    <label>Sheet Width</label>
+                                    <select id="p-sheet-width" onchange="applyPageMargins()">
+                                        <option value="210mm">A4 Standard (210mm)</option>
+                                        <option value="100%">Full Width (100%)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- GLOBAL HEADERS, TYPOGRAPHY & BULLET INDENT CONTROL PANEL -->
+            <div class="builder-section" id="sec-global">
+                <div class="builder-section-header">
+                    <h3>📐 Global Typography & Headers</h3>
+                    <button type="button" class="btn-toggle-sec"
+                        onclick="toggleSectionBody('sec-global-body')">Minimize</button>
+                </div>
+                <div class="section-body" id="sec-global-body">
+                    <details class="tool-dropdown" open>
+                        <summary>⚙️ Global Typography & Header Controls [Click to Open] <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Font Family</label>
+                                    <select id="g-font-fam" onchange="renderPreview()">
+                                        <option value="'Times New Roman', Times, serif" selected>Times New Roman
+                                        </option>
+                                        <option value="'Helvetica Neue', Helvetica, Arial, sans-serif">Helvetica / Arial
+                                        </option>
+                                        <option value="Calibri, Candara, Segoe, sans-serif">Calibri</option>
+                                        <option value="Georgia, serif">Georgia</option>
+                                        <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+                                        <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group"><label>Line Spacing</label><input type="number"
+                                        id="g-line-height" value="1.43" step="0.01" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Letter Spacing (px)</label><input type="number"
+                                        id="g-letter-sp" value="0" step="0.2" oninput="renderPreview()"></div>
+                            </div>
+
+                            <div
+                                style="background:#090e17; padding:8px; border-radius:4px; border:1px solid #1e293b; margin-top:6px;">
+                                <span
+                                    style="font-size:0.7rem; font-weight:bold; color:#38bdf8; display:block; margin-bottom:4px;">
+                                    🎯 Complete Unified Font Hierarchy Controls
+                                </span>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label style="color:#38bdf8;">Header Size (Level 1)</label>
+                                        <input type="number" id="g-sec-sz" value="14.0" step="0.2"
+                                            oninput="renderPreview()">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="color:#fde047;"
+                                            title="Company Name, Project Title, Education Subhead">Sub-Header Size
+                                            (Level 2)</label>
+                                        <input type="number" id="g-subhead-sz" value="13.2" step="0.2"
+                                            oninput="syncSubHeaderSize(this.value)">
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top:4px;">
+                                    <div class="form-group">
+                                        <label style="color:#a78bfa;"
+                                            title="Tech Stack, Role, University Subtitle, Other Labels">🖋️ Italic /
+                                            Meta / Tech Stack Size (Level 3)</label>
+                                        <input type="number" id="g-meta-sz" value="12.8" step="0.2"
+                                            oninput="syncMetaItalicSize(this.value)">
+                                    </div>
+                                    <div class="form-group">
+                                        <label style="color:#4ade80;"
+                                            title="Bullets, Summary, Skills, Descriptions">Body / Content Size (Level
+                                            4)</label>
+                                        <input type="number" id="g-body-sz" value="14.5" step="0.2"
+                                            oninput="syncGlobalBodySize(this.value)">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin-top:6px;">
+                                <div class="form-group"><label>Header Color</label><input type="color" id="g-sec-cl"
+                                        value="#000000" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Border Color</label><input type="color" id="g-line-cl"
+                                        value="#1d4ed8" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Border Thickness</label><input type="number"
+                                        id="g-line-th" value="1.2" step="0.2" oninput="renderPreview()"></div>
+                            </div>
+                            <div class="row" style="margin-top:4px;">
+                                <div class="form-group"><label>Space Above Header</label><input type="number"
+                                        id="g-sec-mt" value="7" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Space Below Header</label><input type="number"
+                                        id="g-sec-mb" value="3" oninput="renderPreview()"></div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="tool-dropdown">
+                        <summary>🎯 Bullet & 2nd Line Indent Controls (सभी बुलेट्स के लिए) [Click to Open]
+                            <span>▼</span>
+                        </summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group">
+                                    <label>Bullet Left Indent (px)</label>
+                                    <input type="number" id="g-bul-indent" value="0" oninput="renderPreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label style="color:#fde047;">2nd Line Shift (दायां/बायां px)</label>
+                                    <input type="number" id="g-bul-line2" value="10" oninput="renderPreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>Bullet Bottom Gap</label>
+                                    <input type="number" id="g-bul-mb" value="2" oninput="renderPreview()">
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 1. NAME CONTROL -->
+            <div class="builder-section" id="sec-ctrl-name">
+                <div class="builder-section-header">
+                    <h3>1. Name Control</h3>
+                    <div class="header-actions">
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-name-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-name-body">
+                    <div class="form-group"><label>Text</label><input type="text" id="c-name-txt" value="SARFRAZ ALAM"
+                            oninput="renderPreview()"></div>
+                    <details class="tool-dropdown">
+                        <summary>⚙️ Name Styling Controls <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group"><label>Size (px)</label><input type="number" id="c-name-sz"
+                                        value="19.5" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Color</label><input type="color" id="c-name-cl"
+                                        value="#000000" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Align</label><select id="c-name-al"
+                                        onchange="renderPreview()">
+                                        <option value="left" selected>Left</option>
+                                        <option value="center">Center</option>
+                                        <option value="right">Right</option>
+                                    </select></div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 2. JOB TITLE CONTROL -->
+            <div class="builder-section" id="sec-ctrl-title">
+                <div class="builder-section-header">
+                    <h3>2. Job Title Control</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('title', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-title-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-title-body">
+                    <div class="form-group"><label>Title Text</label><input type="text" id="c-title-txt"
+                            value="Senior Full Stack Engineer | React.js | Next.js | Node.js | PHP / Laravel | AWS & Cloud Architecture"
+                            oninput="renderPreview()"></div>
+                    <details class="tool-dropdown">
+                        <summary>⚙️ Title Styling Controls <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group"><label>Size (px)</label><input type="number" id="c-title-sz"
+                                        value="13.8" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Color</label><input type="color" id="c-title-cl"
+                                        value="#1d4ed8" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Align</label><select id="c-title-al"
+                                        onchange="renderPreview()">
+                                        <option value="left" selected>Left</option>
+                                        <option value="center">Center</option>
+                                        <option value="right">Right</option>
+                                    </select></div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 3. CONTACT CONTROL -->
+            <div class="builder-section" id="sec-ctrl-contact">
+                <div class="builder-section-header">
+                    <h3>3. Contact Control</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('contact', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-contact-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-contact-body">
+                    <div class="form-group"><label>Contact Line</label><textarea id="c-cont-txt"
+                            oninput="renderPreview()"
+                            style="height:35px;">Kestopur, Kolkata | Mob: +91 7324930960 | Email: myjobsarfraz@gmail.com | Portfolio: portfolio.999moneysave.co.in</textarea>
+                    </div>
+
+                    <details class="tool-dropdown">
+                        <summary>⚙️ Contact Styling Controls <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group"><label>Size (px)</label><input type="number" id="c-cont-sz"
+                                        value="11" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Color</label><input type="color" id="c-cont-cl"
+                                        value="#334155" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Align</label><select id="c-cont-al"
+                                        onchange="renderPreview()">
+                                        <option value="left" selected>Left</option>
+                                        <option value="center">Center</option>
+                                        <option value="right">Right</option>
+                                    </select></div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 4. SUMMARY CONTROL -->
+            <div class="builder-section" id="sec-ctrl-summary">
+                <div class="builder-section-header">
+                    <h3>4. Summary Control</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('summary', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-summary-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-summary-body">
+                    <div class="form-group"><label>Summary Text</label><textarea id="c-sum-txt"
+                            oninput="renderPreview()"
+                            style="height:65px;">Results-driven Senior Full Stack Engineer with over 5+ years of hands-on experience designing, developing, and deploying scalable web applications across the entire software development lifecycle. Proven expertise in front-end and back-end architectures utilizing React.js, Next.js, Node.js, and PHP / Laravel. Strong background in relational/non-relational database optimization (MySQL, PostgreSQL, MongoDB), Redis caching, and cloud deployments (AWS, Azure, Docker). Dedicated to clean architecture, code quality, and high performance.</textarea>
+                    </div>
+                    <details class="tool-dropdown">
+                        <summary>⚙️ Summary Styling Controls <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group"><label>Size (px)</label><input type="number" id="c-sum-sz"
+                                        value="14.5" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Color</label><input type="color" id="c-sum-cl"
+                                        value="#334155" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Align</label><select id="c-sum-al"
+                                        onchange="renderPreview()">
+                                        <option value="justify" selected>Justify</option>
+                                        <option value="left">Left</option>
+                                    </select></div>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- 5. TECHNICAL CAPABILITIES -->
+            <div class="builder-section" id="sec-ctrl-skills">
+                <div class="builder-section-header">
+                    <h3>5. Technical Capabilities (Two-Column Controls)</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('skills', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-skills-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-skills-body">
+                    <details class="tool-dropdown">
+                        <summary>⚙️ Two-Column Styling & Width Controls <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group"><label>Left Width (%)</label><input type="number"
+                                        id="c-skill-lw" value="43" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Right Width (%)</label><input type="number"
+                                        id="c-skill-rw" value="70" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Gap / Space (%)</label><input type="number"
+                                        id="c-skill-gw" value="0" oninput="renderPreview()"></div>
+                            </div>
+                            <div class="row" style="margin-top:4px;">
+                                <div class="form-group"><label>Left Size</label><input type="number" id="c-skill-lsz"
+                                        value="14.5" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Left Color</label><input type="color" id="c-skill-lcl"
+                                        value="#000000" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Left Weight</label><select id="c-skill-lwt"
+                                        onchange="renderPreview()">
+                                        <option value="bold" selected>Bold</option>
+                                        <option value="normal">Normal</option>
+                                    </select></div>
+                            </div>
+                            <div class="row" style="margin-top:4px;">
+                                <div class="form-group"><label>Right Size</label><input type="number" id="c-skill-rsz"
+                                        value="14.5" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Right Color</label><input type="color" id="c-skill-rcl"
+                                        value="#334155" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Right Align</label><select id="c-skill-ral"
+                                        onchange="renderPreview()">
+                                        <option value="justify" selected>Justify</option>
+                                        <option value="left">Left</option>
+                                    </select></div>
+                            </div>
+                            <div class="row"
+                                style="margin-top:4px; background:#090e17; padding:6px; border-radius:4px; border:1px solid #1e293b;">
+                                <div class="form-group">
+                                    <label style="color:#fde047;">Left Title 2nd Line Shift (px)</label>
+                                    <input type="number" id="c-skill-l-ind" value="9" oninput="renderPreview()">
+                                </div>
+                                <div class="form-group">
+                                    <label>Right 2nd Line Indent (px)</label>
+                                    <input type="number" id="c-skill-r-ind" value="0" oninput="renderPreview()">
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <div class="excel-grid-box">
+                        <div
+                            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                            <span style="font-size:0.75rem; font-weight:bold; color:#f8fafc;">Skills Data (Excel Mode -
+                                Multi-Line Smart Paste)</span>
+                            <button type="button" class="btn" style="padding:4px 8px; font-size:0.7rem;"
+                                onclick="addSkillRows(5)">+ 5 Rows जोड़ें</button>
+                        </div>
+                        <div class="excel-grid-head">
+                            <span>Left Text (Category)</span>
+                            <span>Right Text (Technologies / Details)</span>
+                            <span style="text-align:center;">#</span>
+                        </div>
+                        <div id="skills-grid-container"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. PROFESSIONAL EXPERIENCE -->
+            <div class="builder-section" id="sec-ctrl-exp">
+                <div class="builder-section-header">
+                    <h3>6. Professional Experience Controls</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('experiences', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-exp-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-exp-body">
+                    <details class="tool-dropdown">
+                        <summary>⚙️ Experience Typography & Style Controls <span>▼</span></summary>
+                        <div class="tool-dropdown-content">
+                            <div class="row">
+                                <div class="form-group"><label>Company Size</label><input type="number" id="e-comp-sz"
+                                        value="13.2" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Company Color</label><input type="color" id="e-comp-cl"
+                                        value="#000000" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Company Weight</label><select id="e-comp-wt"
+                                        onchange="renderPreview()">
+                                        <option value="bold" selected>Bold</option>
+                                        <option value="normal">Normal</option>
+                                    </select></div>
+                            </div>
+                            <div class="row" style="margin-top:4px;">
+                                <div class="form-group"><label>Role Size</label><input type="number" id="e-role-sz"
+                                        value="12.8" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Role Color</label><input type="color" id="e-role-cl"
+                                        value="#1d4ed8" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Role Italic</label><select id="e-role-it"
+                                        onchange="renderPreview()">
+                                        <option value="normal" selected>Normal</option>
+                                        <option value="italic">Italic</option>
+                                    </select></div>
+                            </div>
+                            <div class="row" style="margin-top:4px;">
+                                <div class="form-group"><label>Tenure Size</label><input type="number" id="e-ten-sz"
+                                        value="12.8" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Tenure Color</label><input type="color" id="e-ten-cl"
+                                        value="#64748b" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Tenure Italic</label><select id="e-ten-it"
+                                        onchange="renderPreview()">
+                                        <option value="italic" selected>Italic</option>
+                                        <option value="normal">Normal</option>
+                                    </select></div>
+                            </div>
+                            <div class="row" style="margin-top:4px;">
+                                <div class="form-group"><label>Bullet Size</label><input type="number" id="e-bul-sz"
+                                        value="14.5" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Bullet Color</label><input type="color" id="e-bul-cl"
+                                        value="#334155" oninput="renderPreview()"></div>
+                                <div class="form-group"><label>Bullet Align</label><select id="e-bul-al"
+                                        onchange="renderPreview()">
+                                        <option value="justify" selected>Justify</option>
+                                        <option value="left">Left</option>
+                                    </select></div>
+                            </div>
+                        </div>
+                    </details>
+                    <div id="exp-editor" style="margin-top:8px;"></div>
+                    <button class="btn" onclick="addExp()" style="margin-top:6px;">+ Add Experience</button>
+                </div>
+            </div>
+
+            <!-- 7. KEY PROJECTS -->
+            <div class="builder-section" id="sec-ctrl-proj">
+                <div class="builder-section-header">
+                    <h3>7. Key Projects Controls</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('projects', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-proj-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-proj-body">
+                    <div id="proj-editor"></div>
+                    <button class="btn" onclick="addProj()" style="margin-top:6px;">+ Add Project</button>
+                </div>
+            </div>
+
+            <!-- 8. AWARDS, CERTIFICATIONS & EDUCATION -->
+            <div class="builder-section" id="sec-ctrl-ace">
+                <div class="builder-section-header">
+                    <h3>8. Awards, Certifications & Education</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('ace', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-ace-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-ace-body">
+                    <div class="form-group">
+                        <label style="color:#38bdf8;">Awards & Certifications (Left Column Bullets)</label>
+                        <textarea id="c-awards-txt" oninput="renderPreview()" style="height:50px;"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#38bdf8;">Education (Right Column - Format: Degree | Institution |
+                            Subtitle)</label>
+                        <textarea id="c-edu-txt" oninput="renderPreview()" style="height:55px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. OTHER DETAILS -->
+            <div class="builder-section" id="sec-ctrl-other">
+                <div class="builder-section-header">
+                    <h3>9. Other Details</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('other', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-other-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-other-body">
+                    <div class="form-group">
+                        <label>Other Details (Format: <b>Label: Value</b> per line)</label>
+                        <textarea id="c-oth-txt" oninput="renderPreview()" style="height:55px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. SOFT SKILLS & CORE COMPETENCIES -->
+            <div class="builder-section" id="sec-ctrl-soft">
+                <div class="builder-section-header">
+                    <h3>10. Soft Skills & Core Competencies</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('soft', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-soft-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-soft-body">
+                    <div class="form-group">
+                        <label>Soft Skills (एक लाइन में 1 बुलेट):</label>
+                        <textarea id="c-soft-txt" oninput="renderPreview()" style="height:55px;"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. LANGUAGES KNOWN -->
+            <div class="builder-section" id="sec-ctrl-lang">
+                <div class="builder-section-header">
+                    <h3>11. Languages Known</h3>
+                    <div class="header-actions">
+                        <select class="sec-switcher-mini" onchange="switchSectionData('lang', this.value)">
+                            <option value="inherit">Profile Source ▼</option>
+                            <option value="fullstack">1. Full-Stack</option>
+                            <option value="sap">2. SAP Consultant</option>
+                            <option value="techsupport">3. Tech Support</option>
+                            <option value="principal">4. School Principal</option>
+                        </select>
+                        <button type="button" class="btn-toggle-sec"
+                            onclick="toggleSectionBody('sec-lang-body')">Minimize</button>
+                    </div>
+                </div>
+                <div class="section-body" id="sec-lang-body">
+                    <div class="form-group">
+                        <label>Languages (Format: <b>Language: Proficiency</b>):</label>
+                        <textarea id="c-lang-txt" oninput="renderPreview()"
+                            style="height:50px;">English: Professional Working Proficiency &nbsp;|&nbsp; Hindi: Native / Bilingual &nbsp;|&nbsp; Urdu: Fluent Conversational</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn btn-success" onclick="window.print()">🖨️ Browser Print Dialog</button>
+        </div>
+
+        <!-- ==================== RIGHT: PREVIEW PANEL (100vh) ==================== -->
+        <div class="preview-wrapper" id="preview-scroller">
+            <div class="preview-panel" id="resume-preview">
+                <div id="p-name" class="resume-name">SARFRAZ ALAM</div>
+                <div id="p-title" class="resume-subheader">Title</div>
+                <div id="p-contact" class="resume-contact">Contact</div>
+
+                <!-- 4. SUMMARY (NO BREAK) -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-sum">PROFESSIONAL SUMMARY</div>
+                    <div id="p-summary" class="resume-body">Summary</div>
+                </div>
+
+                <!-- 5. TECHNICAL CAPABILITIES (NO BREAK) -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-skills">TECHNICAL CAPABILITIES</div>
+                    <div id="p-skills"></div>
+                </div>
+
+                <!-- 6. PROFESSIONAL EXPERIENCE (NO BREAK) -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-exp">PROFESSIONAL EXPERIENCE</div>
+                    <div id="p-exp"></div>
+                </div>
+
+                <!-- 7. KEY PROJECTS (NO BREAK) -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-proj">KEY PROJECTS</div>
+                    <div id="p-proj"></div>
+                </div>
+
+                <!-- 8. AWARDS, CERTIFICATIONS & EDUCATION -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-ace">AWARDS, CERTIFICATIONS & EDUCATION</div>
+                    <div id="p-ace" style="margin-top:3px;"></div>
+                </div>
+
+                <!-- 9. OTHER DETAILS (NO BREAK) -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-oth">OTHER DETAILS</div>
+                    <div id="p-other-list" style="margin-top:3px;"></div>
+                </div>
+
+                <!-- 10. SOFT SKILLS (NO BREAK) -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-soft">CORE COMPETENCIES & SOFT SKILLS</div>
+                    <div id="p-soft-list" style="margin-top:3px;"></div>
+                </div>
+
+                <!-- 11. LANGUAGES (NO BREAK) -->
+                <div class="no-break-group">
+                    <div class="sec-title" id="sec-head-lang">LANGUAGES KNOWN</div>
+                    <div id="p-lang-list" style="margin-top:3px; color:#334155;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== COMPLETE 4 PROFILES REAL DATA ====================
+        const allPresets = {
+            fullstack: {
+                title: "Senior Full Stack Engineer | React.js | Next.js | Node.js | PHP / Laravel | AWS & Cloud Architecture",
+                contact: "Dhanbad, Jharkhand | Mob: +91 7324930960 | Email: myjobsarfraz@gmail.com | Portfolio: portfolio.999moneysave.co.in",
+                summary: "Results-driven Senior Full Stack Engineer with over 5+ years of hands-on experience designing, developing, and deploying scalable web applications across the entire software development lifecycle. Proven expertise in front-end and back-end architectures utilizing React.js, Next.js, Node.js, and PHP / Laravel. Strong background in relational/non-relational database optimization (MySQL, PostgreSQL, MongoDB), Redis caching, and cloud deployments (AWS, Azure, Docker). Dedicated to clean architecture, code quality, and high performance.",
+                skills: "Full-Stack Tech Stack | Node.js, Express.js, React.js, PHP, Laravel, JavaScript (ES6+), TypeScript, HTML5, CSS3, Tailwind CSS\nDatabases & Caching | MySQL, PostgreSQL, MongoDB, Redis (In-Memory Storage & Caching Optimization)\nCloud & DevOps | AWS (S3, EC2), Microsoft Azure, Docker, CI/CD Deployment Pipelines, Nginx, Linux Server Administration\nArchitecture & Tools | RESTful APIs, Git/GitHub Version Control, Microservices, Code Quality Reviews, Performance Security",
+                experiences: [
+                    {
+                        company: "CONCENTRIX DAKSH SERVICES INDIA PRIVATE LIMITED",
+                        role: "Senior Full Stack Engineer",
+                        tenure: "January 2023 – Present | Remote / Gurugram",
+                        bullets: "Owned the end-to-end design, development, testing, and deployment of scalable full-stack web applications using Node.js, React.js, and PHP / Laravel.\nPartnered with cross-functional product and engineering teams to architect robust solutions, translate requirements, and deliver high-quality software on schedule.\nEnforced best coding practices, clean architecture, and rigorous security standards to guarantee high application performance and scalability.\nConducted regular code reviews to maintain technical consistency, security compliance, and codebase quality across engineering squads.\nOptimized complex relational and non-relational database integrations (MySQL, PostgreSQL, MongoDB) and implemented Redis caching mechanisms to reduce latency."
+                    },
+                    {
+                        company: "GENPACT INDIA",
+                        role: "Full Stack Developer / Software Engineer",
+                        tenure: "May 2017 – December 2022 | Gurugram, India",
+                        bullets: "Developed and maintained dynamic client-server applications utilizing JavaScript, Node.js, and PHP backend frameworks.\nManaged cloud infrastructure deployment and server configurations on AWS and Microsoft Azure environments.\nHandled version control operations, code branching strategies, and repository management using Git and GitHub.\nPerformed advanced troubleshooting, debugging, and production issue resolution for database queries and API bottlenecks."
+                    }
+                ],
+                projects: [
+                    {
+                        title: "Project 1: FireLab – Maintenance Management Platform",
+                        meta: "Tech Stack: React.js, Node.js, Express, MongoDB, AWS Cloud",
+                        bullets: "Architected a full-stack enterprise facility management platform from scratch, improving resource tracking efficiency by 40%.\nOptimized backend queries and database indexing using MongoDB, and deployed containerized services on AWS cloud.\nDeveloped reusable component design systems and streamlined build pipelines via GitHub Actions."
+                    }
+                ],
+                awards: "Top Performer Award (Front End Dev) — Clairtree / Concentrix (2023–2024)\nAptitude & Technical Certification — Planet Spark (Top Rank in Web Engineering)",
+                edu: "Diploma in Computer Science & Engineering | Annamalai University, Tamil Nadu | First Class with Distinction | 2015 – 2018\nBachelor of Technology (B.Tech) in Computer Science & Engineering | Annamalai University, Tamil Nadu | First Class with Distinction | 2018 – 2021",
+                other: "Location: Dhanbad / Remote\nAvailability: Immediate Joiner\nExpected CTC: As per Industry Norms",
+                soft: "Agile & Scrum Methodologies & Sprint Planning\nCross-Functional Team Collaboration & Technical Mentoring\nComplex Root-Cause Analysis & Debugging\nStakeholder Communication & Rapid Prototyping",
+                lang: "English: Professional Working Proficiency | Hindi: Native / Bilingual | Urdu: Fluent Conversational"
+            },
+            sap: {
+                title: "SAP SuccessFactors Consultant | Employee Central, PMGM & Time Off Specialist | HR Digital Transformation",
+                contact: "Gurugram, Haryana | Mob: +91 7324930960 | Email: myjobsarfraz@gmail.com | Verified S-User ID Certified",
+                summary: "Solution-oriented SAP SuccessFactors Certified Consultant with 5+ years of extensive hands-on experience in global HR technology implementations and business process engineering. Specialized in Employee Central (EC), Time Off, Position Management, and Custom MDF objects. Proven expertise in Cloud Platform Integration (CPI), data migration using Infoporter, business rules derivation, and provisioning configuration.",
+                skills: "SAP Core Modules | SuccessFactors Employee Central (EC), Time Off, Position Management, PMGM, Succession Planning\nData & Integration | Custom MDF Entities, Foundation Objects, Business Rules Engine, Cloud Platform Integration (CPI), OData APIs\nSystem Administration | Legacy Data Migration (Infoporter), Provisioning Setup, Picklist Management, Role-Based Permissions (RBP)\nCompliance & Quality | HR Security Compliance, UAT Test Scripts, Cutover Management, Post Go-Live Hypercare Support",
+                experiences: [
+                    {
+                        company: "CONCENTRIX DAKSH SERVICES INDIA PRIVATE LIMITED",
+                        role: "Senior SAP SuccessFactors Consultant",
+                        tenure: "January 2023 – Present | Gurugram, India",
+                        bullets: "Spearheaded end-to-end implementation and configuration of Employee Central & Time Off modules for global clients with 10,000+ employees.\nConfigured complex Business Rules, Event Reason Derivations, and Custom MDF entities ensuring 100% compliance with multi-country labor regulations.\nAutomated multi-level leave approvals and absence workflows, reducing manual HR administrative processing time by 65%.\nConducted client workshops, functional specification documentation (FDD), and executed end-to-end user acceptance testing (UAT)."
+                    },
+                    {
+                        company: "GENPACT INDIA",
+                        role: "SAP HR / SuccessFactors Technical Analyst",
+                        tenure: "May 2018 – December 2022 | Gurugram, India",
+                        bullets: "Managed L2/L3 support operations for global SuccessFactors instances, maintaining 99% SLA adherence on provisioning and RBP tickets.\nExecuted semi-annual SAP release validation cycles, regression testing, and impact analyses for enterprise client instances.\nBuilt seamless custom data integration pipelines connecting SAP SuccessFactors with third-party payroll engines via OData APIs."
+                    }
+                ],
+                projects: [
+                    {
+                        title: "Project 1: Global Enterprise Employee Central & Time Off Rollout",
+                        meta: "Tech Stack: SAP SF EC, CPI, Custom MDF, OData, Provisioning",
+                        bullets: "Successfully executed full lifecycle implementation for 14 regional entities with localized holiday calendars and time profiles.\nMigrated 8,500+ employee records from legacy SAP ECC to SuccessFactors with zero data loss using Infoporter and workbench tools."
+                    }
+                ],
+                awards: "SAP Certified Application Associate – SAP SuccessFactors Employee Central\nConsultant of the Year Award — Global IT Delivery (2023)",
+                edu: "B.Sc. in Mathematics | St. Columbus College, Hazaribagh (Vinoba Bhave University) | First Class\nSAP Official Implementation Academy Certification",
+                other: "Location: Gurugram / Remote\nAvailability: Immediate / 15 Days\nCertifications: SAP SF Certified Professional",
+                soft: "Enterprise Stakeholder Management & Requirements Gathering\nBusiness Process Gap Analysis & Workflow Optimization\nEnd-User Training & Change Management Delivery\nCross-Border Functional Team Coordination",
+                lang: "English: Full Professional Proficiency | Hindi: Native / Bilingual | Urdu: Fluent Conversational"
+            },
+            techsupport: {
+                title: "Technical Support Executive | L1/L2 Enterprise Support | ServiceNow & CRM Specialist | ITIL Certified",
+                contact: "Gurugram / Delhi NCR | Mob: +91 7324930960 | Email: myjobsarfraz@gmail.com | 24/7 Support Readiness",
+                summary: "Dedicated, metrics-driven Technical Support Specialist with over 5+ years of experience delivering high-caliber L1/L2 application support, technical troubleshooting, and system administration in 24/7 enterprise service desk operations. Expert in ITIL incident management lifecycles, ticketing CRM systems (ServiceNow, Jira, Salesforce), remote desktop triage, Active Directory, and SaaS infrastructure.",
+                skills: "IT Support & Triage | L1/L2 Enterprise Support, Incident & Problem Management, Root Cause Analysis (RCA), SLA Adherence\nCRM & Helpdesk Tools | ServiceNow, Jira Service Management, Zendesk, Salesforce Service Cloud, Remedy\nInfrastructure & OS | Active Directory, Windows Server, Azure AD, Office 365 Administration, TCP/IP, DNS, VPN Configuration\nDiagnostics & Monitoring | Splunk Log Analysis, SolarWinds, Remote Desktop (RDP), Endpoint Security, MFA Verification",
+                experiences: [
+                    {
+                        company: "CONCENTRIX DAKSH SERVICES INDIA PRIVATE LIMITED",
+                        role: "Senior Technical Support Executive (L2 Tier)",
+                        tenure: "January 2023 – Present | Gurugram, India",
+                        bullets: "Delivered high-tier L2 application and infrastructure troubleshooting for enterprise customers, maintaining a 98.5% First Contact Resolution (FCR).\nManaged critical P1/P2 major incident bridges, coordinating with network and development engineers to restore service availability within tight SLAs.\nAuthored and updated 40+ Knowledge Base (KB) troubleshooting runbooks, decreasing resolution turnaround time across the team by 30%.\nMonitored system health alerts and network telemetry via Splunk and SolarWinds to proactively identify and resolve server latency spikes."
+                    },
+                    {
+                        company: "GENPACT INDIA",
+                        role: "Technical Support Associate (L1/L2)",
+                        tenure: "August 2018 – December 2022 | Gurugram, India",
+                        bullets: "Handled an average of 35+ technical support tickets daily across phone, email, and live portal channels with a 99% CSAT rating.\nAdministered user provisioning, security access groups, and distribution list permissions using Active Directory and Microsoft 365 Admin Center.\nConducted detailed hardware/software diagnostics, resolving VPN connectivity errors, remote desktop failures, and client database queries."
+                    }
+                ],
+                projects: [
+                    {
+                        title: "Project 1: Enterprise Service Desk Incident Automation",
+                        meta: "Tools: ServiceNow, Jira Workflows, Active Directory Automation",
+                        bullets: "Designed automated ticket classification and routing rules in ServiceNow, reducing average incident assignment latency by 45%.\nImplemented self-service password reset integration lowering common L1 call volume by 20%."
+                    }
+                ],
+                awards: "Customer Delight Champion & Top CSAT Award (2023)\nOutstanding Service Delivery Performer — Genpact (2021)",
+                edu: "B.Sc. in Mathematics | St. Columbus College, Hazaribagh | First Class\nITIL Foundation Certified in IT Service Management",
+                other: "Shift Flexibility: 24/7 Rotational & Night Shifts\nNotice Period: Immediate Joiner\nWork Mode: Hybrid / Remote",
+                soft: "Active Listening & Customer De-escalation Expertise\nHigh-Pressure Incident Management & Critical Communication\nAnalytical Thinking & Methodical Diagnostics\nCross-Functional Technical Collaboration",
+                lang: "English: Fluent Professional Working Proficiency | Hindi: Native | Urdu: Conversational"
+            },
+            principal: {
+                title: "School Principal & Academic Director | CBSE & ICSE Curriculum Specialist | Institutional Leadership",
+                contact: "Dhanbad, Jharkhand | Mob: +91 7324930960 | Email: 999moneysave1@gmail.com | Principal Administration Desk",
+                summary: "Visionary Academic Administrator and School Principal with 10+ years of distinguished leadership across secondary and senior secondary educational institutions. Proven track record in CBSE/ICSE curriculum implementation, institutional regulatory compliance, NEP 2020 pedagogical integration, teacher recruitment & faculty mentoring, and student academic excellence. Committed to holistic student growth and transparent administration.",
+                skills: "Academic Leadership | Institutional Vision & Pacing, CBSE/State Board Affiliation & Compliance, NEP 2020 Framework Integration\nFaculty & Staff Governance | Teacher Recruitment, Performance Appraisal & Mentorship, Faculty Training & Workshop Leadership\nAdministration & Operations | School ERP Systems, Annual Budgeting & Resource Allocation, Admissions Strategy, Discipline Protocols\nCommunity Relations | Parent-Teacher Association (PTA) Governance, Student Career Guidance, Co-Curricular & Sports Administration",
+                experiences: [
+                    {
+                        company: "PRAKHAR SECONDARY SCHOOL",
+                        role: "School Principal",
+                        tenure: "April 2021 – Present | Giridih / Dhanbad",
+                        bullets: "Spearheaded academic and administrative operations for 1,200+ students and 65 faculty members, achieving consecutive 100% board examination pass rates.\nIntroduced modern STEM labs, experiential learning methodologies, and smart classroom setups, driving student enrollment up by 40% year-over-year.\nModernized institutional administration by deploying comprehensive School ERP software for automated fee collection, report cards, and parent updates.\nConducted periodic academic audits and organized quarterly pedagogical enrichment workshops for senior and primary faculty."
+                    },
+                    {
+                        company: "ST. XAVIER'S MODEL ACADEMY",
+                        role: "Vice Principal & Senior Academic Coordinator",
+                        tenure: "May 2015 – March 2021 | Jharkhand",
+                        bullets: "Supervised daily academic scheduling, curriculum delivery pacing, teacher performance evaluations, and inter-school co-curricular competitions.\nLed the CBSE institutional affiliation renewal inspection committee, achieving 100% compliance with zero audit remarks.\nInstituted student counseling and remedial mentoring programs that improved overall pass percentages in core Mathematics and Science by 25%."
+                    }
+                ],
+                projects: [
+                    {
+                        title: "Project 1: NEP 2020 Modernization & Experiential Learning Labs",
+                        meta: "Framework: National Education Policy 2020, Smart STEM Labs",
+                        bullets: "Established interactive robotics, coding clubs, and experiential science labs for grades 6 through 12.\nRestructured assessment rubrics from rote testing to comprehensive competency-based continuous evaluation models."
+                    }
+                ],
+                awards: "Best Educator & Academic Leadership Award — District Education Office (2022)\nExcellence in School Administration & Community Impact Award (2019)",
+                edu: "M.Sc. in Mathematics | William Carey University | First Class\nBachelor of Education (B.Ed.) | University of Jammu | Distinction Honors",
+                other: "Affiliations Handled: CBSE & ICSE Senior Secondary\nNotice Period: 30 Days\nExpected Salary: As per Central/CBSE 7th Pay Norms",
+                soft: "Visionary Institutional Leadership & Decision Making\nConflict Resolution & Mediation (Parents, Staff & Students)\nInspiring Public Speaking & Community Engagement\nFaculty Mentoring & Talent Retention",
+                lang: "Hindi: Native Exemplary | English: Fluent Academic & Professional | Urdu: Fluent Literary"
+            }
+        };
+
+        let activeExps = JSON.parse(JSON.stringify(allPresets.fullstack.experiences));
+        let activeProjs = JSON.parse(JSON.stringify(allPresets.fullstack.projects));
+        let totalSkillRows = 0;
+        let targetDirectoryHandle = null;
+
+        // ==================== UNIFIED SYNCHRONIZERS ====================
+        function syncSubHeaderSize(val) {
+            document.getElementById('e-comp-sz').value = val;
+            renderPreview();
+        }
+
+        function syncMetaItalicSize(val) {
+            document.getElementById('e-role-sz').value = val;
+            document.getElementById('e-ten-sz').value = val;
+            renderPreview();
+        }
+
+        function syncGlobalBodySize(sz) {
+            sz = parseFloat(sz) || 14.5;
+            document.getElementById('c-sum-sz').value = sz.toFixed(1);
+            document.getElementById('c-skill-lsz').value = sz.toFixed(1);
+            document.getElementById('c-skill-rsz').value = sz.toFixed(1);
+            document.getElementById('e-bul-sz').value = sz.toFixed(1);
+            renderPreview();
+        }
+
+        // ==================== DIRECT FOLDER SAVER & TIMESTAMP LOGIC ====================
+        function updateLiveTimestamp() {
+            const now = new Date();
+            const pad = (n) => String(n).padStart(2, '0');
+            const formatted = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
+            const input = document.getElementById('pdf-live-timestamp');
+            if (input) input.value = formatted;
+            return formatted;
+        }
+        setInterval(updateLiveTimestamp, 1000);
+
+        // DIRECT FOLDER LINKING
+        async function linkTargetDirectory() {
+            try {
+                if ('showDirectoryPicker' in window) {
+                    targetDirectoryHandle = await window.showDirectoryPicker({
+                        mode: 'readwrite',
+                        startIn: 'desktop'
+                    });
+
+                    const permission = await targetDirectoryHandle.requestPermission({ mode: 'readwrite' });
+                    if (permission === 'granted') {
+                        document.getElementById('disp-folder-path').innerHTML = `🟢 <b>Connected:</b> ${targetDirectoryHandle.name} (Direct Auto-Save Active)`;
+                        alert(`✅ आपका फ़ोल्डर सफलतापूर्वक लिंक हो गया है: ${targetDirectoryHandle.name}\n\nअब PDF सीधे इसी फोल्डर में सेव होगी!`);
+                    }
+                } else {
+                    alert("कृपया Chrome या Edge ब्राउज़र का उपयोग करें।");
+                }
+            } catch (e) {
+                console.log("Directory picking cancelled", e);
+            }
+        }
+
+        // FLUID MULTI-PAGE PDF EXPORT WITH IDENTICAL TOP MARGINS ON EVERY PAGE
+        async function savePdfDirectToFolder() {
+            const timeStr = updateLiveTimestamp();
+            let counterEl = document.getElementById('pdf-version-counter');
+            let counter = parseInt(counterEl.value) || 1;
+            const role = document.getElementById('preset-sel').value;
+            const safeName = document.getElementById('c-name-txt').value.trim().replace(/\s+/g, '_') || "Sarfraz_Alam";
+
+            const fileName = `${safeName}_${role}_${timeStr}_v${counter}.pdf`;
+            const element = document.getElementById('resume-preview');
+
+            let mTop = parseFloat(document.getElementById('p-mg-top').value) || 12;
+            let mBot = parseFloat(document.getElementById('p-mg-bot').value) || 12;
+            let mLeft = parseFloat(document.getElementById('p-mg-left').value) || 14;
+            let mRight = parseFloat(document.getElementById('p-mg-right').value) || 14;
+
+            const opt = {
+                margin: [mTop, mLeft, mBot, mRight],
+                filename: fileName,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: ['css', 'legacy'], avoid: ['.no-break-group', '.sec-title', '.project-item', '.exp-item'] }
+            };
+
+            try {
+                const oldPadding = element.style.padding;
+                element.style.padding = "0px";
+
+                const pdfBlob = await html2pdf().set(opt).from(element).output('blob');
+
+                element.style.padding = oldPadding;
+
+                if (targetDirectoryHandle) {
+                    const fileHandle = await targetDirectoryHandle.getFileHandle(fileName, { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(pdfBlob);
+                    await writable.close();
+                    alert(`🎉 सफलता!\n\nPDF सीधे आपके टारगेट फ़ोल्डर में सेव हो गई है:\n${fileName}`);
+                } else {
+                    alert("⚠️ कृपया ऊपर दिए गए '📂 Link Target Folder' बटन पर क्लिक करके अपना फोल्डर लिंक करें। अब यह सामान्य डाउनलोड में जा रही है।");
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(pdfBlob);
+                    link.download = fileName;
+                    link.click();
+                }
+
+                addHistoryLog(counter, fileName, timeStr);
+                counterEl.value = counter + 1;
+
+            } catch (err) {
+                alert("PDF सेव करने में त्रुटि: " + err.message);
+            }
+        }
+
+        function addHistoryLog(version, fileName, timeStr) {
+            const tbody = document.getElementById('history-log-body');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+            <td><b>v${version}</b></td>
+            <td style="color:#38bdf8;">${fileName}</td>
+            <td>${timeStr}</td>
+            <td>
+                <button type="button" class="btn" style="padding:2px 5px; font-size:0.65rem;" onclick="copyCleanResumeText()">📋 Copy Text</button>
+            </td>
+        `;
+            tbody.prepend(row);
+        }
+
+        function copyCleanResumeText() {
+            const cleanText = document.getElementById('resume-preview').innerText;
+            navigator.clipboard.writeText(cleanText).then(() => {
+                alert("📋 Clean Resume Text (बिना किसी 1, 2 नंबरिंग के) क्लिपबोर्ड में कॉपी हो गया है!");
+            });
+        }
+
+        function copyGeminiMasterPrompt() {
+            const promptTemplate = `Act as an Elite Executive ATS Resume Architect.
+I am providing you with my Master Resume and a target Job Description (JD).
+Your task is to tailor, rephrase, and align my resume strictly to match the JD with a 98%+ ATS score while preserving the factual truth of my experience.
+
+You MUST output STRICTLY in the clean format provided.`;
+
+            navigator.clipboard.writeText(promptTemplate).then(() => {
+                alert("📋 Gemini Master Prompt कॉपी हो गया है!\n\nअब gemini.google.com पर जाएँ, इसे पेस्ट करें और अपना JD जोड़ दें।");
+            });
+        }
+
+        // ==================== MASTER & LOCAL SECTION SWITCHERS ====================
+        function loadMasterPreset(key) {
+            let p = allPresets[key];
+            if (!p) return;
+
+            document.getElementById('c-title-txt').value = p.title;
+            document.getElementById('c-cont-txt').value = p.contact;
+            document.getElementById('c-sum-txt').value = p.summary;
+            document.getElementById('c-awards-txt').value = p.awards || "";
+            document.getElementById('c-edu-txt').value = p.edu || "";
+            document.getElementById('c-oth-txt').value = p.other || "";
+            document.getElementById('c-soft-txt').value = p.soft || "";
+            document.getElementById('c-lang-txt').value = p.lang || "";
+
+            activeExps = JSON.parse(JSON.stringify(p.experiences));
+            activeProjs = JSON.parse(JSON.stringify(p.projects));
+
+            parseSkillsStringToGrid(p.skills);
+            document.querySelectorAll('.sec-switcher-mini').forEach(sel => sel.value = 'inherit');
+
+            renderEditor();
+        }
+
+        function switchSectionData(section, roleKey) {
+            if (roleKey === 'inherit') {
+                roleKey = document.getElementById('preset-sel').value;
+            }
+            let p = allPresets[roleKey];
+            if (!p) return;
+
+            if (section === 'title') document.getElementById('c-title-txt').value = p.title;
+            else if (section === 'contact') document.getElementById('c-cont-txt').value = p.contact;
+            else if (section === 'summary') document.getElementById('c-sum-txt').value = p.summary;
+            else if (section === 'skills') parseSkillsStringToGrid(p.skills);
+            else if (section === 'experiences') { activeExps = JSON.parse(JSON.stringify(p.experiences)); renderEditor(); }
+            else if (section === 'projects') { activeProjs = JSON.parse(JSON.stringify(p.projects)); renderEditor(); }
+            else if (section === 'ace') { document.getElementById('c-awards-txt').value = p.awards || ""; document.getElementById('c-edu-txt').value = p.edu || ""; }
+            else if (section === 'other') document.getElementById('c-oth-txt').value = p.other || "";
+            else if (section === 'soft') document.getElementById('c-soft-txt').value = p.soft || "";
+            else if (section === 'lang') document.getElementById('c-lang-txt').value = p.lang || "";
+
+            renderPreview();
+        }
+
+        function toggleSectionBody(bodyId) {
+            const el = document.getElementById(bodyId);
+            if (el) {
+                el.classList.toggle('minimized');
+                const btn = el.previousElementSibling ? el.previousElementSibling.querySelector('.btn-toggle-sec') : null;
+                if (btn) btn.innerText = el.classList.contains('minimized') ? '+ Expand' : 'Minimize';
+            }
+        }
+
+        // ==================== SMART NLP TEXT / WORD PARSER ====================
+        function smartParseRawTextOrJSON() {
+            let raw = document.getElementById('ai-magic-json').value.trim();
+            if (!raw) {
+                alert("कृपया पहले ChatGPT, Gemini या Word से कॉपी किया हुआ टेक्स्ट यहाँ पेस्ट करें!");
+                return;
+            }
+
+            if (raw.startsWith('{') || raw.startsWith('```json')) {
+                try {
+                    let clean = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+                    let data = JSON.parse(clean);
+                    applyAIResumeData(data);
+                    alert("🎉 सफलता! JSON डेटा लोड हो गया!");
+                    return;
+                } catch (e) { }
+            }
+
+            try {
+                let lines = raw.split(/\r?\n/);
+                let cleanedLines = [];
+                let startAdding = false;
+
+                for (let l of lines) {
+                    let t = l.trim();
+                    if (!startAdding) {
+                        if (t.startsWith('**') || t.startsWith('#') || (t.length > 3 && t === t.toUpperCase() && !t.includes('BHAI'))) {
+                            startAdding = true;
+                        }
+                    }
+                    if (startAdding) cleanedLines.push(l);
+                }
+
+                let textToParse = (cleanedLines.length > 0 ? cleanedLines.join('\n') : raw).trim();
+                const secPattern = /\n(?:\s*[\*\#\_\-]*\s*)(PROFESSIONAL SUMMARY|SUMMARY|TECHNICAL CAPABILITIES|TECHNICAL SKILLS|SKILLS|PROFESSIONAL EXPERIENCE|EXPERIENCE|WORK EXPERIENCE|KEY PROJECTS|PROJECTS|EDUCATIONAL QUALIFICATIONS|EDUCATION|OTHER DETAILS|PERSONAL DETAILS|CORE COMPETENCIES|SOFT SKILLS|LANGUAGES|LANGUAGES KNOWN)(?:\s*[\*\#\_\-]*\s*)\n/gi;
+
+                let matches = [];
+                let match;
+                while ((match = secPattern.exec(textToParse)) !== null) {
+                    matches.push({ title: match[1].toUpperCase(), index: match.index, length: match[0].length });
+                }
+
+                let parsedData = {
+                    name: "", title: "", contact: "", summary: "",
+                    skills: [], experiences: [], projects: [],
+                    awards: "", edu: "", other: "", soft: "", lang: ""
+                };
+
+                let headerText = matches.length > 0 ? textToParse.substring(0, matches[0].index) : textToParse;
+                let hLines = headerText.split('\n')
+                    .map(l => l.replace(/[\*\_\#\-]/g, '').trim())
+                    .filter(l => l.length > 0 && !/^(bhai|here is|please find|yeh lijiye)/i.test(l));
+
+                if (hLines.length > 0) parsedData.name = hLines[0];
+                if (hLines.length > 1) parsedData.title = hLines[1];
+                if (hLines.length > 2) parsedData.contact = hLines.slice(2).join(' | ');
+
+                for (let i = 0; i < matches.length; i++) {
+                    let secTitle = matches[i].title;
+                    let start = matches[i].index + matches[i].length;
+                    let end = (i + 1 < matches.length) ? matches[i + 1].index : textToParse.length;
+                    let secContent = textToParse.substring(start, end).trim();
+
+                    if (secTitle.includes("SUMMARY")) {
+                        parsedData.summary = secContent.replace(/^[\*\_\#\s]+/gm, '').trim();
+                    } else if (secTitle.includes("TECHNICAL") || secTitle.includes("SKILLS")) {
+                        secContent.split('\n').filter(l => l.trim() !== "").forEach(l => {
+                            let cleanLine = l.replace(/^[\*\-\•\s]+/, '').trim();
+                            let parts = cleanLine.split(/[:|]/);
+                            if (parts.length >= 2) {
+                                let left = parts[0].replace(/[\*\_\#]/g, '').trim();
+                                let right = parts.slice(1).join(':').replace(/[\*\_\#]/g, '').trim();
+                                if (left && right) parsedData.skills.push({ left, right });
+                            }
+                        });
+                    } else if (secTitle.includes("EXPERIENCE")) {
+                        let expBlocks = secContent.split(/\n\s*\n+/);
+                        let curComp = null;
+
+                        expBlocks.forEach(block => {
+                            let bLines = block.split('\n').map(l => l.trim()).filter(l => l !== "");
+                            if (bLines.length === 0) return;
+                            let firstLine = bLines[0].replace(/[\*\_\#]/g, '').trim();
+
+                            if (!bLines[0].startsWith('*') && !bLines[0].startsWith('-') && !bLines[0].startsWith('•')) {
+                                if (curComp && bLines[0].includes('|')) {
+                                    let parts = bLines[0].split('|');
+                                    curComp.role = parts[0].replace(/[\*\_\#]/g, '').trim();
+                                    curComp.tenure = parts.slice(1).join('|').replace(/[\*\_\#]/g, '').trim();
+                                    for (let k = 1; k < bLines.length; k++) {
+                                        let bText = bLines[k].replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim();
+                                        if (bText) curComp.bullets.push(bText);
+                                    }
+                                } else {
+                                    curComp = { company: firstLine, role: "", tenure: "", bullets: [] };
+                                    parsedData.experiences.push(curComp);
+
+                                    if (bLines.length > 1 && bLines[1].includes('|')) {
+                                        let rParts = bLines[1].split('|');
+                                        curComp.role = rParts[0].replace(/[\*\_\#]/g, '').trim();
+                                        curComp.tenure = rParts.slice(1).join('|').replace(/[\*\_\#]/g, '').trim();
+                                        for (let k = 2; k < bLines.length; k++) {
+                                            let bText = bLines[k].replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim();
+                                            if (bText) curComp.bullets.push(bText);
+                                        }
+                                    }
+                                }
+                            } else if (curComp) {
+                                bLines.forEach(l => {
+                                    let bText = l.replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim();
+                                    if (bText) curComp.bullets.push(bText);
+                                });
+                            }
+                        });
+
+                        parsedData.experiences.forEach(ex => { ex.bullets = ex.bullets.join('\n'); });
+                    } else if (secTitle.includes("PROJECT")) {
+                        secContent.split(/\n\s*\n+/).forEach(block => {
+                            let pLines = block.split('\n').map(l => l.trim()).filter(l => l !== "");
+                            if (pLines.length === 0) return;
+                            let pObj = { title: "", meta: "", bullets: "" };
+                            let bList = [];
+
+                            pLines.forEach((l, idx) => {
+                                let clean = l.replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim();
+                                if (idx === 0) pObj.title = clean;
+                                else if (clean.toLowerCase().includes('tech stack:') || clean.toLowerCase().includes('duration:') || idx === 1) pObj.meta = clean;
+                                else bList.push(clean);
+                            });
+                            pObj.bullets = bList.join('\n');
+                            parsedData.projects.push(pObj);
+                        });
+                    } else if (secTitle.includes("EDUCATION") || secTitle.includes("QUALIFICATION")) {
+                        parsedData.edu = secContent.split('\n').map(l => l.replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim()).filter(l => l !== "").join('\n');
+                    } else if (secTitle.includes("OTHER") || secTitle.includes("PERSONAL")) {
+                        parsedData.other = secContent.split('\n').map(l => l.replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim()).filter(l => l !== "").join('\n');
+                    } else if (secTitle.includes("SOFT") || secTitle.includes("COMPETENCIES")) {
+                        parsedData.soft = secContent.split('\n').map(l => l.replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim()).filter(l => l !== "").join('\n');
+                    } else if (secTitle.includes("LANGUAGE")) {
+                        parsedData.lang = secContent.split('\n').map(l => l.replace(/^[\*\-\•\s]+/, '').replace(/[\*\_\#]/g, '').trim()).filter(l => l !== "").join(' | ');
+                    }
+                }
+
+                applyAIResumeData(parsedData);
+                alert("🎉 जादुई सफलता!\n\nआपके वर्ड/टेक्स्ट फॉर्मेट से सारा डेटा सभी सेक्शन्स में भर गया है!");
+
+            } catch (err) {
+                alert("❌ टेक्स्ट पढ़ने में त्रुटि: " + err.message);
+            }
+        }
+
+        // ==================== TABS & DIRECT API SETUP ====================
+        function switchAITab(tab) {
+            document.querySelectorAll('.ai-tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.ai-tab-content').forEach(c => c.classList.remove('active'));
+
+            if (tab === 'api') {
+                document.getElementById('tab-btn-api').classList.add('active');
+                document.getElementById('ai-content-api').classList.add('active');
+            } else {
+                document.getElementById('tab-btn-magic').classList.add('active');
+                document.getElementById('ai-content-magic').classList.add('active');
+            }
+        }
+
+        function checkSavedKey() {
+            const prov = document.getElementById('ai-provider').value;
+            const saved = localStorage.getItem(`resume_ai_key_${prov}`) || "";
+            document.getElementById('ai-api-key').value = saved;
+        }
+
+        function saveAPIKey() {
+            const prov = document.getElementById('ai-provider').value;
+            const key = document.getElementById('ai-api-key').value.trim();
+            if (key) localStorage.setItem(`resume_ai_key_${prov}`, key);
+        }
+
+        async function callDirectAI() {
+            const provider = document.getElementById('ai-provider').value;
+            const apiKey = document.getElementById('ai-api-key').value.trim();
+            const rawJD = document.getElementById('ai-raw-jd').value.trim();
+
+            if (!apiKey || !rawJD) {
+                alert("कृपया API Key और Job Description दोनों दर्ज करें!");
+                return;
+            }
+
+            saveAPIKey();
+            const statusEl = document.getElementById('ai-loading-status');
+            const btn = document.getElementById('btn-call-ai');
+            statusEl.style.display = 'block';
+            btn.disabled = true;
+
+            const systemPrompt = `You are an elite ATS resume architect. Analyze this Job Description (JD) and tailor this applicant's profile to 100% match the JD.
+Return STRICT valid JSON only in this schema:
+{
+  "title": "Optimized Job Title aligning with JD",
+  "summary": "Impactful summary tailored to JD.",
+  "skills": [{"left": "Category Title", "right": "Skills comma separated"}],
+  "experiences": [{"company": "Company Name", "role": "Role Title", "tenure": "Jan 2023 - Present | Location", "bullets": "Bullet 1\\nBullet 2"}],
+  "projects": [{"title": "Project Title", "meta": "Tech Stack", "bullets": "Bullet 1"}],
+  "soft": "Soft skill 1\\nSoft skill 2",
+  "lang": "English: Professional | Hindi: Native | Urdu: Fluent"
+}
+Job Description:
+${rawJD}`;
+
+            try {
+                let resultJSON = null;
+                if (provider === 'gemini') {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+                    const resp = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: systemPrompt }] }],
+                            generationConfig: { response_mime_type: "application/json" }
+                        })
+                    });
+                    const data = await resp.json();
+                    resultJSON = JSON.parse(data.candidates[0].content.parts[0].text);
+                } else {
+                    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                        body: JSON.stringify({
+                            model: "gpt-4o-mini",
+                            messages: [{ role: "user", content: systemPrompt }],
+                            response_format: { type: "json_object" }
+                        })
+                    });
+                    const data = await resp.json();
+                    resultJSON = JSON.parse(data.choices[0].message.content);
+                }
+
+                applyAIResumeData(resultJSON);
+                alert("🚀 AI ने आपके रिज़्यूमे को नए JD के अनुसार सफलतापूर्वक अपडेट कर दिया है!");
+            } catch (err) {
+                alert("❌ AI कॉल में त्रुटि: " + err.message);
+            } finally {
+                statusEl.style.display = 'none';
+                btn.disabled = false;
+            }
+        }
+
+        function applyAIResumeData(data) {
+            if (data.name) document.getElementById('c-name-txt').value = data.name;
+            if (data.title) document.getElementById('c-title-txt').value = data.title;
+            if (data.contact) document.getElementById('c-cont-txt').value = data.contact;
+            if (data.summary) document.getElementById('c-sum-txt').value = data.summary;
+
+            if (data.skills && Array.isArray(data.skills) && data.skills.length > 0) {
+                const container = document.getElementById('skills-grid-container');
+                container.innerHTML = "";
+                totalSkillRows = 0;
+                addSkillRows(Math.max(5, data.skills.length), data.skills);
+            }
+
+            if (data.experiences && Array.isArray(data.experiences) && data.experiences.length > 0) {
+                activeExps = data.experiences;
+                renderEditor();
+            }
+
+            if (data.projects && Array.isArray(data.projects) && data.projects.length > 0) {
+                activeProjs = data.projects;
+                renderEditor();
+            }
+
+            if (data.awards) document.getElementById('c-awards-txt').value = data.awards;
+            if (data.edu) document.getElementById('c-edu-txt').value = data.edu;
+            if (data.other) document.getElementById('c-oth-txt').value = data.other;
+            if (data.soft) document.getElementById('c-soft-txt').value = data.soft;
+            if (data.lang) document.getElementById('c-lang-txt').value = data.lang;
+
+            renderPreview();
+        }
+
+        // ==================== PAGE MARGINS & LAYOUT FIT ====================
+        function applyPageMargins() {
+            let top = document.getElementById('p-mg-top').value + 'mm';
+            let bot = document.getElementById('p-mg-bot').value + 'mm';
+            let left = document.getElementById('p-mg-left').value + 'mm';
+            let right = document.getElementById('p-mg-right').value + 'mm';
+            let scale = (parseFloat(document.getElementById('p-scale-val').value) || 100) / 100;
+            let sheetW = document.getElementById('p-sheet-width').value;
+
+            let prev = document.getElementById('resume-preview');
+            prev.style.padding = `${top} ${right} ${bot} ${left}`;
+            prev.style.width = sheetW;
+            prev.style.transform = `scale(${scale})`;
+        }
+
+        // ==================== EXCEL SKILLS GRID LOGIC ====================
+        function addSkillRows(count = 5, populateData = null) {
+            const container = document.getElementById('skills-grid-container');
+            for (let i = 0; i < count; i++) {
+                totalSkillRows++;
+                const rNum = totalSkillRows;
+                const row = document.createElement('div');
+                row.className = 'excel-row';
+                row.id = `skill-r-${rNum}`;
+
+                let leftVal = (populateData && populateData[i]) ? populateData[i].left || "" : "";
+                let rightVal = (populateData && populateData[i]) ? populateData[i].right || "" : "";
+
+                row.innerHTML = `
+                <input type="text" class="tc-left-data" data-row="${rNum}" placeholder="Category..." value="${leftVal}" oninput="renderPreview()">
+                <input type="text" class="tc-right-data" data-row="${rNum}" placeholder="Skills..." value="${rightVal}" oninput="renderPreview()">
+                <span class="excel-row-num">${rNum}</span>
+            `;
+                container.appendChild(row);
+            }
+            attachSmartPaste();
+            renderPreview();
+        }
+
+        function parseSkillsStringToGrid(skillsStr) {
+            const container = document.getElementById('skills-grid-container');
+            container.innerHTML = "";
+            totalSkillRows = 0;
+
+            const parsed = [];
+            skillsStr.split('\n').forEach(line => {
+                if (line.includes('|')) {
+                    const parts = line.split('|');
+                    parsed.push({ left: parts[0].trim(), right: parts[1].trim() });
+                }
+            });
+
+            addSkillRows(Math.max(5, parsed.length), parsed);
+        }
+
+        function attachSmartPaste() {
+            ['tc-left-data', 'tc-right-data'].forEach(className => {
+                document.querySelectorAll(`.${className}`).forEach(input => {
+                    input.onpaste = function (e) {
+                        const clipboardData = e.clipboardData || window.clipboardData;
+                        const pastedText = clipboardData.getData('Text');
+
+                        if (pastedText && pastedText.includes('\n')) {
+                            e.preventDefault();
+                            const lines = pastedText.split(/\r?\n/).filter(line => line.trim() !== "");
+                            const currentRowIndex = parseInt(this.getAttribute('data-row')) - 1;
+                            const allInputs = document.querySelectorAll(`.${className}`);
+
+                            const needed = (currentRowIndex + lines.length) - allInputs.length;
+                            if (needed > 0) addSkillRows(Math.ceil(needed / 5) * 5);
+
+                            const updatedInputs = document.querySelectorAll(`.${className}`);
+                            lines.forEach((lineText, idx) => {
+                                if (updatedInputs[currentRowIndex + idx]) {
+                                    updatedInputs[currentRowIndex + idx].value = lineText.trim();
+                                }
+                            });
+                            renderPreview();
+                        }
+                    };
+                });
+            });
+        }
+
+        // ==================== EXPERIENCE & PROJECTS EDITORS ====================
+        function renderEditor() {
+            let expH = "";
+            activeExps.forEach((e, i) => {
+                expH += `
+                <div class="exp-item" style="background:#0f172a; padding:8px; margin-bottom:8px; border-radius:4px; border:1px solid #475569;" onclick="event.stopPropagation();">
+                    <label>Company Name</label>
+                    <input type="text" id="e-comp-${i}" value="${e.company}" oninput="syncEx(${i})" onclick="event.stopPropagation();">
+
+                    <label style="margin-top:4px;">Role / Sub-title</label>
+                    <input type="text" id="e-role-${i}" value="${e.role}" oninput="syncEx(${i})" onclick="event.stopPropagation();">
+
+                    <label style="margin-top:4px;">Tenure & Location</label>
+                    <input type="text" id="e-tn-${i}" value="${e.tenure}" oninput="syncEx(${i})" onclick="event.stopPropagation();">
+
+                    <label style="margin-top:4px;">Bullets</label>
+                    <textarea id="e-bl-${i}" oninput="syncEx(${i})" onclick="event.stopPropagation();" style="height:60px;">${e.bullets}</textarea>
+
+                    <div style="display:flex; gap:5px; margin-top:6px;">
+                        <button class="btn" style="background:#0284c7; padding:3px 6px; font-size:0.7rem;" onclick="dupEx(${i})">📋 Copy</button>
+                        <button class="btn btn-danger" onclick="remEx(${i})">🗑️ Delete</button>
+                    </div>
+                </div>
+            `;
+            });
+            document.getElementById('exp-editor').innerHTML = expH;
+
+            let projH = "";
+            activeProjs.forEach((p, i) => {
+                projH += `
+                <div class="project-item" style="background:#0f172a; padding:8px; margin-bottom:8px; border-radius:4px; border:1px solid #475569;" onclick="event.stopPropagation();">
+                    <label>Project Title</label>
+                    <input type="text" id="pr-ti-${i}" value="${p.title}" oninput="syncPr(${i})" onclick="event.stopPropagation();">
+
+                    <label style="margin-top:4px;">Meta / Tech Stack</label>
+                    <input type="text" id="pr-me-${i}" value="${p.meta}" oninput="syncPr(${i})" onclick="event.stopPropagation();">
+
+                    <label style="margin-top:4px;">Bullets</label>
+                    <textarea id="pr-bl-${i}" oninput="syncPr(${i})" onclick="event.stopPropagation();" style="height:50px;">${p.bullets}</textarea>
+
+                    <div style="display:flex; gap:5px; margin-top:6px;">
+                        <button class="btn" style="background:#0284c7; padding:3px 6px; font-size:0.7rem;" onclick="dupPr(${i})">📋 Copy</button>
+                        <button class="btn btn-danger" onclick="remPr(${i})">🗑️ Delete</button>
+                    </div>
+                </div>
+            `;
+            });
+            document.getElementById('proj-editor').innerHTML = projH;
+
+            initSyncEvents();
+            renderPreview();
+        }
+
+        function syncEx(i) {
+            activeExps[i].company = document.getElementById(`e-comp-${i}`).value;
+            activeExps[i].role = document.getElementById(`e-role-${i}`).value;
+            activeExps[i].tenure = document.getElementById(`e-tn-${i}`).value;
+            activeExps[i].bullets = document.getElementById(`e-bl-${i}`).value;
+            renderPreview();
+        }
+        function dupEx(i) { let c = JSON.parse(JSON.stringify(activeExps[i])); c.company += " (Copy)"; activeExps.splice(i + 1, 0, c); renderEditor(); }
+        function remEx(i) { activeExps.splice(i, 1); renderEditor(); }
+        function addExp() { activeExps.push({ company: "Company Name", role: "Role / Sub-title", tenure: "Tenure | Location", bullets: "Bullet 1" }); renderEditor(); }
+
+        function syncPr(i) {
+            activeProjs[i].title = document.getElementById(`pr-ti-${i}`).value;
+            activeProjs[i].meta = document.getElementById(`pr-me-${i}`).value;
+            activeProjs[i].bullets = document.getElementById(`pr-bl-${i}`).value;
+            renderPreview();
+        }
+        function dupPr(i) { let c = JSON.parse(JSON.stringify(activeProjs[i])); c.title += " (Copy)"; activeProjs.splice(i + 1, 0, c); renderEditor(); }
+        function remPr(i) { activeProjs.splice(i, 1); renderEditor(); }
+        function addProj() { activeProjs.push({ title: "Project Title", meta: "Duration | Tech Stack", bullets: "Bullet 1" }); renderEditor(); }
+
+        // ==================== LIVE RESUME PREVIEW RENDERER ====================
+        function renderPreview() {
+            let pPrev = document.getElementById('resume-preview');
+
+            // Typography
+            pPrev.style.setProperty('--global-font', document.getElementById('g-font-fam').value);
+            pPrev.style.setProperty('--line-height', document.getElementById('g-line-height').value);
+            pPrev.style.setProperty('--letter-spacing', document.getElementById('g-letter-sp').value + 'px');
+
+            // Font Levels
+            const headerSize = document.getElementById('g-sec-sz').value || 14.0;
+            const subheadSize = document.getElementById('g-subhead-sz').value || 13.2;
+            const metaSize = document.getElementById('g-meta-sz').value || 12.8;
+            const globalBodySize = document.getElementById('g-body-sz').value || 14.5;
+
+            pPrev.style.setProperty('--sec-title-size', headerSize + 'px');
+            pPrev.style.setProperty('--item-title-size', subheadSize + 'px');
+            pPrev.style.setProperty('--meta-title-size', metaSize + 'px');
+            pPrev.style.setProperty('--global-body-size', globalBodySize + 'px');
+
+            pPrev.style.setProperty('--sec-title-color', document.getElementById('g-sec-cl').value);
+            pPrev.style.setProperty('--sec-line-color', document.getElementById('g-line-cl').value);
+            pPrev.style.setProperty('--sec-line-height', document.getElementById('g-line-th').value + 'px');
+            pPrev.style.setProperty('--sec-margin-top', document.getElementById('g-sec-mt').value + 'px');
+            pPrev.style.setProperty('--sec-margin-bottom', document.getElementById('g-sec-mb').value + 'px');
+
+            // Bullet Hanging Math
+            let bulLeft = parseFloat(document.getElementById('g-bul-indent').value) || 0;
+            let bulLine2 = parseFloat(document.getElementById('g-bul-line2').value) || 0;
+            let bulMb = document.getElementById('g-bul-mb').value + 'px';
+
+            pPrev.style.setProperty('--bullet-indent', (bulLeft + bulLine2) + 'px');
+            pPrev.style.setProperty('--bullet-text-indent', (-bulLine2) + 'px');
+            pPrev.style.setProperty('--bullet-margin-bottom', bulMb);
+
+            // Name
+            let n = document.getElementById('p-name');
+            n.innerText = document.getElementById('c-name-txt').value;
+            n.style.fontSize = document.getElementById('c-name-sz').value + 'px';
+            n.style.color = document.getElementById('c-name-cl').value;
+            n.style.textAlign = document.getElementById('c-name-al').value;
+
+            // Title
+            let t = document.getElementById('p-title');
+            t.innerText = document.getElementById('c-title-txt').value;
+            t.style.fontSize = document.getElementById('c-title-sz').value + 'px';
+            t.style.color = document.getElementById('c-title-cl').value;
+            t.style.textAlign = document.getElementById('c-title-al').value;
+
+            // Contact
+            let co = document.getElementById('p-contact');
+            let rawContact = document.getElementById('c-cont-txt').value;
+            co.innerHTML = makeContactClickable(rawContact);
+
+            co.style.fontSize = document.getElementById('c-cont-sz').value + 'px';
+            co.style.color = document.getElementById('c-cont-cl').value;
+            co.style.textAlign = document.getElementById('c-cont-al').value;
+
+            // Summary
+            let su = document.getElementById('p-summary');
+            su.innerText = document.getElementById('c-sum-txt').value;
+            su.style.fontSize = document.getElementById('c-sum-sz').value + 'px';
+            su.style.color = document.getElementById('c-sum-cl').value;
+            su.style.textAlign = document.getElementById('c-sum-al').value;
+
+            // Technical Capabilities
+            let lw = document.getElementById('c-skill-lw').value;
+            let rw = document.getElementById('c-skill-rw').value;
+            let gw = document.getElementById('c-skill-gw').value;
+            let lsz = document.getElementById('c-skill-lsz').value + 'px';
+            let lcl = document.getElementById('c-skill-lcl').value;
+            let lwt = document.getElementById('c-skill-lwt').value;
+            let rsz = document.getElementById('c-skill-rsz').value + 'px';
+            let rcl = document.getElementById('c-skill-rcl').value;
+            let ral = document.getElementById('c-skill-ral').value;
+            let lInd = parseFloat(document.getElementById('c-skill-l-ind').value) || 0;
+            let rInd = parseFloat(document.getElementById('c-skill-r-ind').value) || 0;
+
+            let skH = "";
+            const leftEls = document.querySelectorAll('.tc-left-data');
+            const rightEls = document.querySelectorAll('.tc-right-data');
+
+            leftEls.forEach((lInput, idx) => {
+                const lText = lInput.value.trim();
+                const rText = rightEls[idx] ? rightEls[idx].value.trim() : "";
+
+                if (lText || rText) {
+                    let lStyle = `width: ${lw}%; margin-right: ${gw}%; font-size: ${lsz}; color: ${lcl}; font-weight: ${lwt};`;
+                    if (lInd > 0) lStyle += ` padding-left: ${lInd}px; text-indent: -${lInd}px;`;
+
+                    let rStyle = `width: ${rw}%; font-size: ${rsz}; color: ${rcl}; text-align: ${ral};`;
+                    if (rInd > 0) rStyle += ` padding-left: ${rInd}px; text-indent: -${rInd}px;`;
+
+                    skH += `
+                    <div class="skill-row">
+                        <div class="skill-title" style="${lStyle}">• ${lText}</div>
+                        <div class="skill-content" style="${rStyle}">${rText}</div>
+                    </div>
+                `;
+                }
+            });
+            document.getElementById('p-skills').innerHTML = skH;
+
+            // Experience
+            let ecSz = document.getElementById('e-comp-sz').value + 'px';
+            let ecCl = document.getElementById('e-comp-cl').value;
+            let ecWt = document.getElementById('e-comp-wt').value;
+            let erSz = document.getElementById('e-role-sz').value + 'px';
+            let erCl = document.getElementById('e-role-cl').value;
+            let erIt = document.getElementById('e-role-it').value;
+            let etSz = document.getElementById('e-ten-sz').value + 'px';
+            let etCl = document.getElementById('e-ten-cl').value;
+            let etIt = document.getElementById('e-ten-it').value;
+            let ebSz = document.getElementById('e-bul-sz').value + 'px';
+            let ebCl = document.getElementById('e-bul-cl').value;
+            let ebAl = document.getElementById('e-bul-al').value;
+
+            let exH = "";
+            activeExps.forEach(e => {
+                let bH = "";
+                e.bullets.split('\n').forEach(b => {
+                    if (b.trim()) {
+                        let clean = b.trim().replace(/^[•\-\*]\s*/, '');
+                        bH += `<div class="resume-bullet" style="font-size: ${ebSz}; color: ${ebCl}; text-align: ${ebAl};">• ${clean}</div>`;
+                    }
+                });
+                exH += `
+                <div class="exp-item" style="margin-bottom: 5px;">
+                    <div>
+                        <span style="font-size: ${ecSz}; font-weight: ${ecWt}; color: ${ecCl};">${e.company}</span>
+                        <span style="font-size: ${erSz}; color: ${erCl}; font-style: ${erIt};"> / ${e.role}</span>
+                    </div>
+                    <div style="font-size: ${etSz}; color: ${etCl}; font-style: ${etIt}; margin-bottom: 2px;">${e.tenure}</div>
+                    ${bH}
+                </div>
+            `;
+            });
+            document.getElementById('p-exp').innerHTML = exH;
+
+            // Key Projects
+            let prH = "";
+            activeProjs.forEach(p => {
+                let pbH = "";
+                p.bullets.split('\n').forEach(b => {
+                    if (b.trim()) {
+                        let clean = b.trim().replace(/^[•\-\*]\s*/, '');
+                        pbH += `<div class="resume-bullet" style="font-size: ${ebSz}; color: ${ebCl}; text-align: ${ebAl};">• ${clean}</div>`;
+                    }
+                });
+                prH += `
+                <div class="project-item">
+                    <div style="font-size: var(--item-title-size); font-weight: bold; color: ${ecCl}; margin-bottom: 1px;">${p.title}</div>
+                    <div style="font-size: var(--meta-title-size); color: #1d4ed8; font-style: italic; font-weight: 500; margin-bottom: 2px;">${p.meta}</div>
+                    ${pbH}
+                </div>
+            `;
+            });
+            document.getElementById('p-proj').innerHTML = prH;
+
+            // ==================== 8. AWARDS & EDUCATION (MATCHING TECH STACK EXACT FONT & COLOR) ====================
+            let awardsList = [];
+            document.getElementById('c-awards-txt').value.split('\n').forEach(a => {
+                if (a.trim()) {
+                    let sepMatch = a.match(/\s*[—]\s*|\s+[–-]\s+|\s*\|\s*/);
+                    let mainAward = a;
+                    let subAward = "";
+                    if (sepMatch) {
+                        let idx = sepMatch.index;
+                        mainAward = a.substring(0, idx).trim();
+                        subAward = a.substring(idx + sepMatch[0].length).trim();
+                    }
+                    mainAward = mainAward.replace(/^[•\-\*]\s*/, '');
+                    awardsList.push({ main: mainAward, sub: subAward });
+                }
+            });
+
+            let eduList = [];
+            document.getElementById('c-edu-txt').value.split('\n').forEach(ed => {
+                if (ed.trim()) {
+                    let parts = ed.split('|');
+                    let mainDegree = parts[0].trim().replace(/^[•\-\*]\s*/, '');
+                    let subDegree = parts.length > 1 ? parts.slice(1).join(' | ').trim() : '';
+                    eduList.push({ main: mainDegree, sub: subDegree });
+                }
+            });
+
+            const maxRows = Math.max(awardsList.length, eduList.length);
+            const pAce = document.getElementById('p-ace');
+            pAce.style.display = 'block';
+
+            let aceH = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 4px;">
+                    <div id="p-awards-subhead" style="font-size: var(--item-title-size); font-weight: bold; color: #1d4ed8; text-transform: uppercase;">AWARDS & CERTIFICATIONS</div>
+                    <div id="p-edu-subhead" style="font-size: var(--item-title-size); font-weight: bold; color: #1d4ed8; text-transform: uppercase;">EDUCATION</div>
+                </div>
+            `;
+
+            for (let i = 0; i < maxRows; i++) {
+                const aw = awardsList[i];
+                const ed = eduList[i];
+
+                aceH += `
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 6px; align-items: start;">
+                        <div>
+                            ${aw ? `
+                                <div class="resume-bullet" style="font-size: ${globalBodySize}px; color: #334155; margin-bottom: 1px;">• ${aw.main}</div>
+                                ${aw.sub ? `<div style="font-size: var(--meta-title-size); color: #1d4ed8; font-style: italic; font-weight: 500; padding-left: calc(var(--bullet-indent) + 2px); margin-bottom: 2px;">${aw.sub}</div>` : ''}
+                            ` : ''}
+                        </div>
+                        <div>
+                            ${ed ? `
+                                <div class="resume-bullet" style="font-size: ${globalBodySize}px; color: #334155; margin-bottom: 1px;">• ${ed.main}</div>
+                                ${ed.sub ? `<div style="font-size: var(--meta-title-size); color: #1d4ed8; font-style: italic; font-weight: 500; padding-left: calc(var(--bullet-indent) + 2px); margin-bottom: 2px;">${ed.sub}</div>` : ''}
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            pAce.innerHTML = aceH;
+
+            // ==================== 9. OTHER DETAILS ====================
+            let otH = "";
+            document.getElementById('c-oth-txt').value.split('\n').forEach(ot => {
+                if (ot.trim()) {
+                    let clean = ot.trim().replace(/^[•\-\*]\s*/, '');
+                    if (clean.includes(':')) {
+                        let colonIdx = clean.indexOf(':');
+                        let lbl = clean.substring(0, colonIdx).trim();
+                        let val = clean.substring(colonIdx + 1).trim();
+
+                        otH += `
+                        <div class="resume-bullet" style="font-size: ${globalBodySize}px; color: #334155; margin-bottom: 2px;">
+                            • <b style="font-size: var(--meta-title-size); color: #1d4ed8; font-style: italic;">${lbl}:</b> ${val}
+                        </div>
+                    `;
+                    } else {
+                        otH += `<div class="resume-bullet" style="font-size: ${globalBodySize}px; color: #334155; margin-bottom: 2px;">• ${clean}</div>`;
+                    }
+                }
+            });
+            document.getElementById('p-other-list').innerHTML = otH;
+
+            // ==================== 10. SOFT SKILLS ====================
+            let softH = "";
+            document.getElementById('c-soft-txt').value.split('\n').forEach(s => {
+                if (s.trim()) {
+                    let clean = s.trim().replace(/^[•\-\*]\s*/, '');
+                    softH += `<div class="resume-bullet" style="font-size: ${globalBodySize}px; color: #334155; margin-bottom: 2px;">• ${clean}</div>`;
+                }
+            });
+            document.getElementById('p-soft-list').innerHTML = softH;
+
+            // ==================== 11. LANGUAGES KNOWN ====================
+            document.getElementById('p-lang-list').innerHTML = document.getElementById('c-lang-txt').value;
+            document.getElementById('p-lang-list').style.fontSize = (parseFloat(globalBodySize) - 1.0) + 'px';
+        }
+
+        // ==================== TWO-WAY SYNC ====================
+        let highlightTimer = null;
+        function syncFocus(builderId, previewTargetId, shouldScrollEditor = false) {
+            document.querySelectorAll('.builder-section').forEach(el => el.classList.remove('active-section'));
+            const bSec = document.getElementById(builderId);
+            if (bSec) {
+                bSec.classList.add('active-section');
+                if (shouldScrollEditor) bSec.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            const pSec = document.getElementById(previewTargetId);
+            if (pSec) {
+                document.querySelectorAll('.preview-focused-sec').forEach(el => el.classList.remove('preview-focused-sec'));
+                pSec.classList.add('preview-focused-sec');
+                pSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                clearTimeout(highlightTimer);
+                highlightTimer = setTimeout(() => { pSec.classList.remove('preview-focused-sec'); }, 2000);
+            }
+        }
+
+        function initSyncEvents() {
+            const mappings = [
+                { bId: 'sec-ctrl-name', pId: 'p-name' },
+                { bId: 'sec-ctrl-title', pId: 'p-title' },
+                { bId: 'sec-ctrl-contact', pId: 'p-contact' },
+                { bId: 'sec-ctrl-summary', pId: 'sec-head-sum' },
+                { bId: 'sec-ctrl-skills', pId: 'sec-head-skills' },
+                { bId: 'sec-ctrl-exp', pId: 'sec-head-exp' },
+                { bId: 'sec-ctrl-proj', pId: 'sec-head-proj' },
+                { bId: 'sec-ctrl-ace', pId: 'sec-head-ace' },
+                { bId: 'sec-ctrl-other', pId: 'sec-head-oth' },
+                { bId: 'sec-ctrl-soft', pId: 'sec-head-soft' },
+                { bId: 'sec-ctrl-lang', pId: 'sec-head-lang' }
+            ];
+
+            mappings.forEach(m => {
+                const bEl = document.getElementById(m.bId);
+                if (bEl) {
+                    bEl.onclick = function (e) {
+                        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                            syncFocus(m.bId, m.pId, false);
+                        }
+                    };
+                }
+            });
+        }
+
+        // ==================== CLICKABLE CONTACT LINKS ====================
+        function makeContactClickable(rawText) {
+            if (!rawText) return "";
+
+            const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+            const urlRegex = /(?:https?:\/\/|www\.|portfolio\.)[^\s<|,]+|[a-zA-Z0-9-]+\.(?:com|in|co\.in|org|net|io|dev|app)(?:\/[^\s<|,]*)?/i;
+            const phoneRegex = /(?:\+?\d{1,3}[\s-]?)?[6-9]\d{4}[\s-]?\d{5}/;
+
+            const masterRegex = new RegExp(
+                `(${emailRegex.source})|(${urlRegex.source})|(${phoneRegex.source})`,
+                'gi'
+            );
+
+            return rawText.replace(masterRegex, (match, email, url, phone) => {
+                if (email) {
+                    return `<a href="mailto:${email}">${email}</a>`;
+                }
+                if (url) {
+                    let href = url.startsWith('http') ? url : 'https://' + url;
+                    return `<a href="${href}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+                }
+                if (phone) {
+                    let cleanNumber = phone.replace(/[\s-]/g, '');
+                    return `<a href="tel:${cleanNumber}">${phone}</a>`;
+                }
+                return match;
+            });
+        }
+
+        window.onload = function () {
+            loadMasterPreset('fullstack');
+            applyPageMargins();
+            checkSavedKey();
+            updateLiveTimestamp();
+        };
+    </script>
+
+</body>
+
+</html>

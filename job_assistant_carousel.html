@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Search Master Blueprint & Recruiter Outreach</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Phosphor Icons -->
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0f19;
+      color: #f1f5f9;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .glass-card {
+      background: rgba(17, 24, 39, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .glass-card-inner {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .carousel-slide {
+      display: none;
+      opacity: 0;
+      transform: translateX(15px);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .carousel-slide.active {
+      display: block;
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-3 sm:p-6 lg:p-8">
+
+  <!-- Main Container -->
+  <div class="max-w-5xl w-full mx-auto">
+    
+    <!-- Top Header -->
+    <header class="mb-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-semibold tracking-wide uppercase mb-2">
+          <i class="ph-bold ph-lightning"></i> Fast-Track Job Assistant
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Recruiter Outreach & Job Search Playbook</h1>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1">Detailed step-by-step practical guide in Hindi with English ATS templates & 1-click audio narration.</p>
+      </div>
+
+      <!-- Audio & Step Badge -->
+      <div class="flex items-center gap-3">
+        <button id="globalAudioBtn" onclick="toggleAudio()" class="px-3.5 py-2 rounded-xl bg-indigo-600/30 hover:bg-indigo-600 border border-indigo-500/40 text-indigo-200 hover:text-white text-xs font-semibold flex items-center gap-2 transition shadow-lg">
+          <i id="audioIcon" class="ph-bold ph-speaker-high text-base"></i>
+          <span id="audioText">हिंदी में सुनें (Audio)</span>
+        </button>
+
+        <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-xl">
+          <span class="text-xs text-slate-400 uppercase">Page</span>
+          <span id="currentStepBadge" class="text-base font-bold text-indigo-400 font-mono-code">01</span>
+          <span class="text-xs text-slate-600">/</span>
+          <span class="text-xs text-slate-500 font-mono-code">06</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Stepper Tabs -->
+    <nav class="flex items-center gap-2 overflow-x-auto pb-3 mb-5 border-b border-slate-800/80">
+      <button onclick="goToSlide(0)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+        <i class="ph-bold ph-rocket-launch"></i> 1. Direct Job Portals
+      </button>
+      <button onclick="goToSlide(1)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2">
+        <i class="ph-bold ph-identification-card"></i> 2. LinkedIn 3-Profile Setup
+      </button>
+      <button onclick="goToSlide(2)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2">
+        <i class="ph-bold ph-magnifying-glass"></i> 3. 24h & Post Search
+      </button>
+      <button onclick="goToSlide(3)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2">
+        <i class="ph-bold ph-paper-plane-tilt"></i> 4. Outreach Templates
+      </button>
+      <button onclick="goToSlide(4)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2">
+        <i class="ph-bold ph-magic-wand"></i> 5. Profile Refresh Hack
+      </button>
+      <button onclick="goToSlide(5)" class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2">
+        <i class="ph-bold ph-target"></i> 6. 20-Min Daily Plan
+      </button>
+    </nav>
+
+    <!-- Carousel Slide Wrapper -->
+    <main class="relative min-h-[520px]">
+
+      <!-- SLIDE 1: TOP JOB PLATFORMS (DIRECT LINKS) -->
+      <section class="carousel-slide active" data-slide="0">
+        <div class="glass-card rounded-2xl p-5 sm:p-7 shadow-2xl">
+          <div class="flex items-center justify-between gap-3 mb-5">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl shrink-0">
+                <i class="ph-bold ph-globe-hemisphere-east"></i>
+              </div>
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">4 Best Job Portals Beyond Naukri & Indeed</h2>
+                <p class="text-xs sm:text-sm text-slate-400">Direct website links par click karke turant registration karein.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            
+            <!-- Instahyre -->
+            <div class="glass-card-inner p-5 rounded-xl border-l-4 border-l-emerald-500 hover:border-slate-600 transition flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Instahyre
+                  </span>
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">AI Inbound</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                  <strong>Kaise kaam karta hai:</strong> Yahan traditional form bhar kar apply nahi karna padta. AI match karta hai aur Amazon, Paytm, Flipkart jaisi MNCs ke recruiters seedhe aapko invite bhejte hain.
+                </p>
+                <div class="text-[11px] text-slate-400 mb-4">
+                  <i class="ph-bold ph-check text-emerald-400"></i> Best for: Full-Stack (React/Next), SAP & L2 Tech Support
+                </div>
+              </div>
+              <a href="https://www.instahyre.com" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-emerald-600/30 hover:bg-emerald-600 border border-emerald-500/40 text-emerald-200 hover:text-white text-xs font-semibold transition">
+                <span>Visit Instahyre (www.instahyre.com)</span>
+                <i class="ph-bold ph-arrow-square-out"></i>
+              </a>
+            </div>
+
+            <!-- Foundit -->
+            <div class="glass-card-inner p-5 rounded-xl border-l-4 border-l-blue-500 hover:border-slate-600 transition flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Foundit (Monster India)
+                  </span>
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">Corporate & BPO</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                  <strong>Kaise kaam karta hai:</strong> India ka sabse purana aur bada corporate consultant database. Concentrix, Genpact, Wipro, Teleperformance ke HR yahan sabse zyada search karte hain.
+                </p>
+                <div class="text-[11px] text-slate-400 mb-4">
+                  <i class="ph-bold ph-check text-blue-400"></i> Best for: L2 Technical Support & Operations
+                </div>
+              </div>
+              <a href="https://www.foundit.in" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-blue-600/30 hover:bg-blue-600 border border-blue-500/40 text-blue-200 hover:text-white text-xs font-semibold transition">
+                <span>Visit Foundit (www.foundit.in)</span>
+                <i class="ph-bold ph-arrow-square-out"></i>
+              </a>
+            </div>
+
+            <!-- Hirist -->
+            <div class="glass-card-inner p-5 rounded-xl border-l-4 border-l-purple-500 hover:border-slate-600 transition flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span> Hirist (Hirist.tech)
+                  </span>
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/20">Pure Tech</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                  <strong>Kaise kaam karta hai:</strong> Sirf software developers aur enterprise software consultants ke liye exclusive platform. Salary package standard portals se behtar milte hain.
+                </p>
+                <div class="text-[11px] text-slate-400 mb-4">
+                  <i class="ph-bold ph-check text-purple-400"></i> Best for: Full-Stack Web Dev & SAP SuccessFactors
+                </div>
+              </div>
+              <a href="https://www.hirist.tech" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-purple-600/30 hover:bg-purple-600 border border-purple-500/40 text-purple-200 hover:text-white text-xs font-semibold transition">
+                <span>Visit Hirist (www.hirist.tech)</span>
+                <i class="ph-bold ph-arrow-square-out"></i>
+              </a>
+            </div>
+
+            <!-- Wellfound -->
+            <div class="glass-card-inner p-5 rounded-xl border-l-4 border-l-amber-500 hover:border-slate-600 transition flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-base font-bold text-white flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Wellfound (AngelList)
+                  </span>
+                  <span class="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Startups & Remote</span>
+                </div>
+                <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                  <strong>Kaise kaam karta hai:</strong> Beech me koi third-party recruiter nahi hota. Seedhe Tech Founders ya CTO se baat hoti hai. Agar remote coding job chahiye toh ye best hai.
+                </p>
+                <div class="text-[11px] text-slate-400 mb-4">
+                  <i class="ph-bold ph-check text-amber-400"></i> Best for: React/Next.js Remote Engineering Roles
+                </div>
+              </div>
+              <a href="https://wellfound.com" target="_blank" rel="noopener noreferrer" class="w-full inline-flex items-center justify-center gap-2 py-2 px-3 rounded-lg bg-amber-600/30 hover:bg-amber-600 border border-amber-500/40 text-amber-200 hover:text-white text-xs font-semibold transition">
+                <span>Visit Wellfound (wellfound.com)</span>
+                <i class="ph-bold ph-arrow-square-out"></i>
+              </a>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: LINKEDIN 3-PROFILE BLUEPRINT (PRACTICAL EXAMPLES) -->
+      <section class="carousel-slide" data-slide="1">
+        <div class="glass-card rounded-2xl p-5 sm:p-7 shadow-2xl">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl shrink-0">
+              <i class="ph-bold ph-linkedin-logo"></i>
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-white">LinkedIn Recruiter-Friendly Setup (Practical Guide)</h2>
+              <p class="text-xs sm:text-sm text-slate-400">Kahan jayein, kaise banayein aur aapke teeno profiles ka alag-alag exact setup.</p>
+            </div>
+          </div>
+
+          <!-- Practical Step-by-Step Instructions -->
+          <div class="p-3.5 mb-4 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-300 space-y-1.5 leading-relaxed">
+            <p><strong>Kahan jayein (Where to click):</strong> LinkedIn app ya website kholen > Apni Profile Photo par click karein > <strong>View Profile</strong> par jayein.</p>
+            <p><strong>1. Profile Photo:</strong> Simple plain background (white ya grey), achhi light me chehra saaf dikhna chahiye (selfie ya casual photo mat lagaiye).</p>
+            <p><strong>2. Banner (Cover Photo):</strong> Canva.com par free me "LinkedIn Banner" search karein. Ek dark background banner banayein jis par aapka primary role likha ho.</p>
+          </div>
+
+          <!-- 3-Role Blueprint Tabs -->
+          <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Aapke 3 Roles Ka Exact Headline, Banner & Open-To-Work Setup:</div>
+          
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+            
+            <!-- Role 1: L2 Support -->
+            <div class="glass-card-inner p-4 rounded-xl border-t-2 border-t-blue-500">
+              <span class="text-xs font-bold text-blue-400 uppercase tracking-wide block mb-1">Profile 1: L2 Tech Support</span>
+              <div class="space-y-2 text-xs">
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Banner Text Idea:</span>
+                  <span class="text-slate-300 font-mono-code text-[11px]">IT Support • Incident Management • SLA • Concentrix Ex</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Exact Headline to Copy:</span>
+                  <div class="bg-slate-950 p-2 rounded text-slate-200 text-[11px] font-mono-code select-all">
+                    L2 Technical Support Executive | Incident & Escalation Management | Concentrix & Genpact | Immediate Joiner
+                  </div>
+                </div>
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Open To Work Titles:</span>
+                  <span class="text-slate-300 text-[11px]">L2 Technical Support, Technical Support Engineer, Customer Support Executive, Incident Management Specialist</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Role 2: Full-Stack Developer -->
+            <div class="glass-card-inner p-4 rounded-xl border-t-2 border-t-emerald-500">
+              <span class="text-xs font-bold text-emerald-400 uppercase tracking-wide block mb-1">Profile 2: Full-Stack Dev</span>
+              <div class="space-y-2 text-xs">
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Banner Text Idea:</span>
+                  <span class="text-slate-300 font-mono-code text-[11px]">React.js • Next.js • Node.js • Scalable Web Apps</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Exact Headline to Copy:</span>
+                  <div class="bg-slate-950 p-2 rounded text-slate-200 text-[11px] font-mono-code select-all">
+                    Full-Stack Engineer | React.js, Next.js, Node.js & TypeScript | 15+ Production Web Apps | Immediate Joiner
+                  </div>
+                </div>
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Open To Work Titles:</span>
+                  <span class="text-slate-300 text-[11px]">Full Stack Engineer, Front End Developer, React Developer, Next.js Developer, Web Engineer</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Role 3: SAP Consultant -->
+            <div class="glass-card-inner p-4 rounded-xl border-t-2 border-t-purple-500">
+              <span class="text-xs font-bold text-purple-400 uppercase tracking-wide block mb-1">Profile 3: SAP Consultant</span>
+              <div class="space-y-2 text-xs">
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Banner Text Idea:</span>
+                  <span class="text-slate-300 font-mono-code text-[11px]">SAP SuccessFactors • Employee Central • Time Off • MDF</span>
+                </div>
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Exact Headline to Copy:</span>
+                  <div class="bg-slate-950 p-2 rounded text-slate-200 text-[11px] font-mono-code select-all">
+                    SAP SuccessFactors Consultant | Employee Central & Time Off | 5+ Yrs Experience | 10+ Implementations
+                  </div>
+                </div>
+                <div>
+                  <span class="text-slate-400 font-semibold block text-[11px]">Open To Work Titles:</span>
+                  <span class="text-slate-300 text-[11px]">SAP SuccessFactors Consultant, SAP Employee Central Consultant, SAP HR Consultant</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Open To Work Instructions -->
+          <div class="mt-4 p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-300 flex items-start gap-2.5">
+            <i class="ph-bold ph-info text-base shrink-0 mt-0.5"></i>
+            <div>
+              <strong>Open To Work Setting Kaise Karein:</strong> Profile me photo ke neeche <span class="underline font-semibold">"Open to work"</span> button dabayein > Apne 5 Job Titles add karein > Locations me <strong>Gurugram, Kolkata, Remote, Hybrid</strong> dalein > Start date me <strong>Immediately</strong> chunein > Visibility me <strong>"All LinkedIn members"</strong> chunein jisse aapki photo par green badge lag jaye aur sabko dikhe.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: 24-HOUR FILTER & POST SEARCH DETAILED EXPLANATION -->
+      <section class="carousel-slide" data-slide="2">
+        <div class="glass-card rounded-2xl p-5 sm:p-7 shadow-2xl">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl shrink-0">
+              <i class="ph-bold ph-funnel"></i>
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-white">24-Hour Job Filter & "Post Filter" Ka Pura Secret</h2>
+              <p class="text-xs sm:text-sm text-slate-400">Post filter ka kya matlab hota hai aur yahan se direct recruiter ka email kaise nikalta hai.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            
+            <!-- Part 1: Jobs Tab 24h filter -->
+            <div class="glass-card-inner p-4 rounded-xl border border-slate-700">
+              <h3 class="text-sm font-bold text-indigo-400 mb-2 flex items-center gap-2">
+                <i class="ph-bold ph-clock"></i> 1. Jobs Tab me "Past 24 Hours" Kyun?
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                Jab koi company LinkedIn par vacancy post karti hai, toh pehle 24 ghante ke andar lagbhag 30 se 50 log apply karte hain. Agar vacancy 1 hafte purani ho gayi, toh 800+ log apply kar chuke hote hain aur HR shuru ke 50 resume dekh kar hiring band kar deta hai.
+              </p>
+              <div class="bg-slate-900 p-2.5 rounded-lg text-[11px] text-slate-300 font-mono-code border border-slate-800">
+                Steps: Jobs Icon > Type: "L2 Support" > Date Posted Filter > Select "Past 24 hours" > Apply!
+              </div>
+            </div>
+
+            <!-- Part 2: POST FILTER Explanation -->
+            <div class="glass-card-inner p-4 rounded-xl border border-purple-500/30">
+              <h3 class="text-sm font-bold text-purple-400 mb-2 flex items-center gap-2">
+                <i class="ph-bold ph-article"></i> 2. "Posts Filter" Ka Kya Matlab Hai?
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed mb-2">
+                Company me jab HR ko turant emergency hiring karni hoti hai, toh wo job form nahi banata. HR apne LinkedIn timeline par ek normal post likhta hai:
+                <em>"We are hiring L2 Support immediately for Gurgaon location. Drop your CV at hr.rahul@concentrix.com"</em>.
+              </p>
+              <div class="bg-slate-900 p-2.5 rounded-lg text-[11px] text-slate-300 font-mono-code border border-slate-800">
+                Steps: Top Search Bar me likhein "Hiring L2 Support" > Enter karein > Upar buttons aayenge (Jobs, People, Posts) > <strong>"Posts"</strong> par click karein > Sort by "Latest" karein!
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Why this works so fast -->
+          <div class="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-slate-300">
+            <span class="font-bold text-amber-300 block mb-1">⚡ Iska Fayda (Zero Competition):</span>
+            Aise posts aam tor par kisi job portal pe nahi aate. Aise post me HR ka direct email id aur WhatsApp number likha hota hai. Agar aapne direct wahan CV bhej diya, toh bina kisi middleman ke 2 ghante me interview schedule ho jata hai!
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: OUTREACH TEMPLATES (EASY COPY) -->
+      <section class="carousel-slide" data-slide="3">
+        <div class="glass-card rounded-2xl p-5 sm:p-7 shadow-2xl">
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl shrink-0">
+                <i class="ph-bold ph-copy"></i>
+              </div>
+              <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white">Direct Recruiter Messages (1-Click Copy)</h2>
+                <p class="text-xs sm:text-sm text-slate-400">Teeno roles ke connection notes aur full email templates tayar hain.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Role Selector Buttons -->
+          <div class="flex gap-2 mb-4 overflow-x-auto pb-1">
+            <button onclick="switchTemplateTab('support')" id="tab-support" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-600 text-white transition flex items-center gap-1.5">
+              <i class="ph-bold ph-headphones"></i> L2 Tech Support
+            </button>
+            <button onclick="switchTemplateTab('fullstack')" id="tab-fullstack" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition flex items-center gap-1.5">
+              <i class="ph-bold ph-code"></i> Full-Stack (React/Next)
+            </button>
+            <button onclick="switchTemplateTab('sap')" id="tab-sap" class="text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition flex items-center gap-1.5">
+              <i class="ph-bold ph-gear"></i> SAP SuccessFactors
+            </button>
+          </div>
+
+          <!-- Template Container 1: Support -->
+          <div id="content-support" class="template-box space-y-3">
+            <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                  <i class="ph-bold ph-paper-plane-right"></i> LinkedIn Connection Note (Short &lt;300 Chars)
+                </span>
+                <button onclick="copyToClipboard('text-support-short', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-xs text-white font-medium transition flex items-center gap-1">
+                  <i class="ph-bold ph-copy"></i> Copy
+                </button>
+              </div>
+              <p id="text-support-short" class="text-xs sm:text-sm text-slate-200 font-mono-code bg-slate-900/80 p-2.5 rounded-lg leading-relaxed select-all">Hi [Name], I noticed your hiring post for L2 Support. I bring 4+ years of experience across Concentrix & Genpact in escalation handling, incident management & strict SLA compliance. I am an immediate joiner and would love to connect!</p>
+            </div>
+
+            <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1">
+                  <i class="ph-bold ph-envelope"></i> Full InMail / Direct Email Template
+                </span>
+                <button onclick="copyToClipboard('text-support-full', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-indigo-600 text-xs text-white font-medium transition flex items-center gap-1">
+                  <i class="ph-bold ph-copy"></i> Copy
+                </button>
+              </div>
+              <pre id="text-support-full" class="text-xs text-slate-200 font-mono-code bg-slate-900/80 p-2.5 rounded-lg whitespace-pre-wrap leading-relaxed select-all">Hi [Name],
+
+I came across the L2 Technical Support opening at your organization and would like to put forward my candidature.
+
+Key highlights of my background:
+• 4+ years of hands-on experience at Concentrix & Genpact managing L2 incident lifecycles, RCA, and customer escalations.
+• Proven track record in strict SLA adherence, CRM workflows, and resolving complex technical/billing queries across omnichannel touchpoints.
+• Available to join immediately (15 days or less).
+
+I have attached my resume for your review and would welcome the opportunity to discuss how my troubleshooting and support expertise can add immediate value to your team.
+
+Best regards,
+Sarfraz Alam | +91 7324930960 | myjobsarfraz@gmail.com</pre>
+            </div>
+          </div>
+
+          <!-- Template Container 2: Full-Stack -->
+          <div id="content-fullstack" class="template-box space-y-3 hidden">
+            <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                  <i class="ph-bold ph-paper-plane-right"></i> LinkedIn Connection Note (Short &lt;300 Chars)
+                </span>
+                <button onclick="copyToClipboard('text-fullstack-short', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-xs text-white font-medium transition flex items-center gap-1">
+                  <i class="ph-bold ph-copy"></i> Copy
+                </button>
+              </div>
+              <p id="text-fullstack-short" class="text-xs sm:text-sm text-slate-200 font-mono-code bg-slate-900/80 p-2.5 rounded-lg leading-relaxed select-all">Hi [Name], I saw your opening for Full-Stack / React Engineer. I offer 4+ years of experience delivering 15+ web applications with React.js, Next.js, Node.js, and CI/CD pipelines. I am an immediate joiner and eager to connect!</p>
+            </div>
+
+            <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1">
+                  <i class="ph-bold ph-envelope"></i> Full InMail / Direct Email Template
+                </span>
+                <button onclick="copyToClipboard('text-fullstack-full', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-indigo-600 text-xs text-white font-medium transition flex items-center gap-1">
+                  <i class="ph-bold ph-copy"></i> Copy
+                </button>
+              </div>
+              <pre id="text-fullstack-full" class="text-xs text-slate-200 font-mono-code bg-slate-900/80 p-2.5 rounded-lg whitespace-pre-wrap leading-relaxed select-all">Hi [Name],
+
+I am writing to express my strong interest in the Full-Stack / Frontend Web Engineer position at your organization.
+
+Summary of technical qualifications:
+• 4+ years architecting and shipping web platforms using React.js, Next.js, TypeScript, Node.js, Express, and MongoDB/MySQL.
+• Delivered 15+ client web projects ahead of schedule with zero production bugs, winning the Top Performer Award (Clairtree Solutions).
+• Experienced in translating complex Figma systems into pixel-perfect UI and automating deployments with Docker, Nginx, and GitHub Actions.
+• Availability: Immediate Joiner.
+
+Portfolio: https://portfolio.999moneysave.co.in
+I would love to connect and share more details on how my engineering background aligns with your roadmap.
+
+Best regards,
+Sarfraz Alam | +91 7324930960 | myjobsarfraz@gmail.com</pre>
+            </div>
+          </div>
+
+          <!-- Template Container 3: SAP -->
+          <div id="content-sap" class="template-box space-y-3 hidden">
+            <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1">
+                  <i class="ph-bold ph-paper-plane-right"></i> LinkedIn Connection Note (Short &lt;300 Chars)
+                </span>
+                <button onclick="copyToClipboard('text-sap-short', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-emerald-600 text-xs text-white font-medium transition flex items-center gap-1">
+                  <i class="ph-bold ph-copy"></i> Copy
+                </button>
+              </div>
+              <p id="text-sap-short" class="text-xs sm:text-sm text-slate-200 font-mono-code bg-slate-900/80 p-2.5 rounded-lg leading-relaxed select-all">Hi [Name], I noticed your requirement for SAP SuccessFactors Consultant. I bring 5+ years experience in Employee Central, Time Off, Foundation & MDF Objects across 10+ client implementations. I am available immediately to discuss.</p>
+            </div>
+
+            <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700/60">
+              <div class="flex justify-between items-center mb-1.5">
+                <span class="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1">
+                  <i class="ph-bold ph-envelope"></i> Full InMail / Direct Email Template
+                </span>
+                <button onclick="copyToClipboard('text-sap-full', this)" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-indigo-600 text-xs text-white font-medium transition flex items-center gap-1">
+                  <i class="ph-bold ph-copy"></i> Copy
+                </button>
+              </div>
+              <pre id="text-sap-full" class="text-xs text-slate-200 font-mono-code bg-slate-900/80 p-2.5 rounded-lg whitespace-pre-wrap leading-relaxed select-all">Hi [Name],
+
+I am reaching out regarding opportunities for an SAP SuccessFactors Consultant within your team.
+
+Key competencies:
+• 5+ years of IT & HR Tech experience specializing in SAP SuccessFactors Employee Central and Time Off modules (Stepping Cloud Consulting).
+• Hands-on expertise with Foundation Objects, custom MDF objects, Business Rules engine, Workflows, data migration workbooks, and cutover support.
+• Successfully delivered 10+ major client implementation lifecycles (including Tata AIG, Kalpataru, Bajaj Consumer, and Snapdeal).
+• Certified in SAP SuccessFactors Employee Central and Time Management.
+• Availability: Immediate (15 days or less).
+
+I have attached my CV and look forward to discussing how my implementation background meets your project needs.
+
+Best regards,
+Sarfraz Alam | +91 7324930960 | sap25sarfraz@gmail.com</pre>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SLIDE 5: PROFILE REFRESH HACK (HOW THE DOT TRICK WORKS) -->
+      <section class="carousel-slide" data-slide="4">
+        <div class="glass-card rounded-2xl p-5 sm:p-7 shadow-2xl">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl shrink-0">
+              <i class="ph-bold ph-cpu"></i>
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-white">Morning Refresh Hack: Dot Hatane Ka Kya Asar Hota Hai?</h2>
+              <p class="text-xs sm:text-sm text-slate-400">Naukri & Foundit ke backend database algorithm ki poori sachhayi.</p>
+            </div>
+          </div>
+
+          <div class="space-y-3.5">
+            
+            <div class="glass-card-inner p-4 rounded-xl border-l-4 border-l-amber-500">
+              <h3 class="text-sm font-bold text-white mb-1.5 flex items-center gap-2">
+                <i class="ph-bold ph-question"></i> Aapka Sawal: "Dot hatakar dobara dot lagane se kya sach me rank karega?"
+              </h3>
+              <p class="text-xs text-slate-300 leading-relaxed">
+                <strong>Jawab: Haan, bilkul 100% karega!</strong> Naukri.com ya Foundit ka algorithm ye check nahi karta ki aapne 500 naye shabd likhe ya sirf ek dot (.) lagaya. Database sirf ek cheez dekhta hai: <span class="text-amber-300 font-mono-code">"Last Profile Modified Timestamp: [Current Date & Time]"</span>.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700">
+                <span class="text-xs font-bold text-indigo-400 block mb-1">Recruiter Ka Search Behavior:</span>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Recruiter jab Naukri par search karta hai, toh filter lagata hai: <em>"Active in last 15 days"</em> ya <em>"Active today"</em>. Jo candidate pichle 1 mahine se login nahi kiya, uska profile 20ve page par chala jata hai.
+                </p>
+              </div>
+
+              <div class="glass-card-inner p-3.5 rounded-xl border border-slate-700">
+                <span class="text-xs font-bold text-emerald-400 block mb-1">Daily 9:15 AM Par Exact Kya Karein:</span>
+                <p class="text-xs text-slate-300 leading-relaxed">
+                  Naukri app kholein > Profile Summary ya Headline me jayein > Last me ek space ya dot dabayein > <strong>Save</strong> kar dein. Bas itna karte hi aapka profile "Active Today" filter me Page 1 par aa jata hai!
+                </p>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs text-slate-400 flex items-start gap-2.5">
+              <i class="ph-bold ph-file-pdf text-rose-400 text-base shrink-0 mt-0.5"></i>
+              <div>
+                <strong>Resume File Name Ka Dhyan Rakhein:</strong> Kabhi bhi file ka naam <span class="text-rose-400 line-through">Resume.pdf</span> ya <span class="text-rose-400 line-through">My_CV.pdf</span> mat rakhein. Hamesha save karein: <span class="text-emerald-400 font-semibold">Sarfraz_Alam_L2_Tech_Support_4Yrs.pdf</span>. System resume ke naam se bhi keywords uthata hai.
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: 20-MIN DAILY ACTION PLAN (DETAILED BLUEPRINT) -->
+      <section class="carousel-slide" data-slide="5">
+        <div class="glass-card rounded-2xl p-5 sm:p-7 shadow-2xl">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl shrink-0">
+              <i class="ph-bold ph-timer"></i>
+            </div>
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-white">Daily 20-Minute Job Routine (Kahan, Kab Aur Kaise)</h2>
+              <p class="text-xs sm:text-sm text-slate-400">Har step ki practical clarity—kahan message bhejna hai aur kitne baje kya karna hai.</p>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            
+            <div class="glass-card-inner p-3.5 rounded-xl flex items-start gap-3">
+              <span class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 font-mono-code font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
+              <div>
+                <h3 class="text-xs font-bold text-white mb-0.5">09:15 AM – 09:20 AM: Profile Refresh (Naukri & Foundit)</h3>
+                <p class="text-xs text-slate-300">Naukri aur Foundit dono apps me login karke headline ya summary me chhota sa edit karke <strong>Save</strong> karein. Isse aapka profile top rankings me lock ho jayega.</p>
+              </div>
+            </div>
+
+            <div class="glass-card-inner p-3.5 rounded-xl flex items-start gap-3">
+              <span class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 font-mono-code font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
+              <div>
+                <h3 class="text-xs font-bold text-white mb-0.5">09:20 AM – 09:25 AM: "Naya Post Khojein" (LinkedIn Posts Search)</h3>
+                <p class="text-xs text-slate-300">LinkedIn Search me type karein: <span class="text-indigo-300 font-mono-code">"Hiring L2 Support"</span> ya <span class="text-indigo-300 font-mono-code">"Hiring React Developer"</span>. Upar <strong>Posts</strong> filter dabayein. Jin HR ne pichle 2-3 ghante me post daali hai, unka email aur requirement note karein.</p>
+              </div>
+            </div>
+
+            <div class="glass-card-inner p-3.5 rounded-xl flex items-start gap-3">
+              <span class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 font-mono-code font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
+              <div>
+                <h3 class="text-xs font-bold text-white mb-0.5">09:25 AM – 09:30 AM: "5 Recruiter Ko Message Kaise Bhejein?"</h3>
+                <p class="text-xs text-slate-300">
+                  <strong>Kahan bhejna hai:</strong> LinkedIn par un 5 recruiters ki profile par <strong>Connect</strong> button dabayein > <strong>"Add a note"</strong> chunein > Hamara short template paste karke send karein. Agar post me email diya ho, toh Gmail kholkar apna full template email kar dein.
+                </p>
+              </div>
+            </div>
+
+            <div class="glass-card-inner p-3.5 rounded-xl flex items-start gap-3">
+              <span class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 font-mono-code font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">4</span>
+              <div>
+                <h3 class="text-xs font-bold text-white mb-0.5">09:30 AM – 09:35 AM: 5-10 Easy Apply Submissions</h3>
+                <p class="text-xs text-slate-300">LinkedIn Jobs me <strong>Past 24 Hours + Easy Apply</strong> filter lagakar 5 se 10 fresh postings me 1-click submit kar dein. Itne se aapka daily target complete ho jayega aur 3 se 5 din ke andar direct call aana shuru ho jayegi.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Carousel Footer Controls -->
+    <footer class="mt-5 flex items-center justify-between gap-4 border-t border-slate-800 pt-4">
+      <button id="prevBtn" onclick="prevSlide()" class="px-5 py-2.5 rounded-xl border border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white text-xs sm:text-sm font-semibold transition flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
+        <i class="ph-bold ph-arrow-left"></i> Previous
+      </button>
+
+      <!-- Carousel Dot Navigation -->
+      <div class="flex items-center gap-2" id="carouselDots">
+        <button onclick="goToSlide(0)" class="dot-btn w-6 h-2.5 rounded-full bg-indigo-500 transition-all"></button>
+        <button onclick="goToSlide(1)" class="dot-btn w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></button>
+        <button onclick="goToSlide(2)" class="dot-btn w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></button>
+        <button onclick="goToSlide(3)" class="dot-btn w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></button>
+        <button onclick="goToSlide(4)" class="dot-btn w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></button>
+        <button onclick="goToSlide(5)" class="dot-btn w-2.5 h-2.5 rounded-full bg-slate-700 transition-all"></button>
+      </div>
+
+      <button id="nextBtn" onclick="nextSlide()" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-semibold transition shadow-lg shadow-indigo-600/25 flex items-center gap-2 disabled:opacity-40 disabled:pointer-events-none">
+        Next <i class="ph-bold ph-arrow-right"></i>
+      </button>
+    </footer>
+
+  </div>
+
+  <!-- Clipboard Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-16 opacity-0 transition duration-300 pointer-events-none flex items-center gap-2 px-4 py-3 rounded-xl bg-emerald-500 text-white font-medium text-xs sm:text-sm shadow-2xl">
+    <i class="ph-bold ph-check-circle text-lg"></i>
+    <span id="toastMessage">Template copied to clipboard!</span>
+  </div>
+
+  <!-- Interactive Script Logic with Speech Synthesis -->
+  <script>
+    let currentSlide = 0;
+    const totalSlides = 6;
+    const slides = document.querySelectorAll('.carousel-slide');
+    const tabs = document.querySelectorAll('.tab-btn');
+    const dots = document.querySelectorAll('.dot-btn');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const currentStepBadge = document.getElementById('currentStepBadge');
+
+    // Hindi Audio Scripts corresponding to each slide
+    const hindiAudioNarrations = [
+      "पेज नंबर एक। नौकरी और इंडीड के अलावा ये चार मुख्य प्लेटफ़ॉर्म हैं। पहला है इन्स्टाहॉयर—जहाँ बिना मैनुअल अप्लाई किए, एआई सिस्टम सीधे रिक्रूटर्स को आपका प्रोफ़ाइल भेजता है। दूसरा है फाउंड-इट—जो टेक सपोर्ट और कॉर्पोरेट जॉब्स के लिए भारत का बहुत बड़ा प्लेटफ़ॉर्म है। तीसरा है हायरिस्ट—जो डेवलपर और एसएपी कंसल्टेंट की हाई-सैलरी नौकरियों के लिए सबसे बेस्ट है। और चौथा है वेलफाउंड—जहाँ आप सीधे स्टार्टअप्स के टेक फाउंडर्स से बात करके रिमोट कोडिंग जॉब पा सकते हैं। हर कार्ड के नीचे डायरेक्ट लिंक दिया हुआ है, जिसपर क्लिक करके आप सीधे रजिस्टर कर सकते हैं।",
+      
+      "पेज नंबर दो। लिंक्डइन प्रोफ़ाइल को रिक्रूटर-फ्रेंडली कैसे बनाएं। सबसे पहले व्यू प्रोफ़ाइल में जाएं। अपनी एक साफ़ चेहरे वाली प्रोफ़ाइल फ़ोटो और कैनवा से बना एक डार्क बैनर लगाएं। इसके बाद अपनी हेडलाइन में सिर्फ सीकिंग जॉब न लिखें, बल्कि अपना रोल, कंपनी और इमीडिएट जॉइनर ज़रूर लिखें। नीचे तीनों रोल्स—एल टू सपोर्ट, फुल स्टैक डेवलपर, और एसएपी कंसल्टेंट—के लिए अलग-अलग रेडीमेड हेडलाइंस दी गई हैं। इसके अलावा प्रोफ़ाइल में ओपन टू वर्क चालू करें, उसमें अपने पाँच जॉब टाइटल्स डालें, लोकेशन में गुरुग्राम, कोलकाता या रिमोट चुनें और विज़िबिलिटी को ऑल मेंबर्स पर सेट करें ताकि हरा बैज लग जाए।",
+      
+      "पेज नंबर तीन। चौबीस घंटे वाले जॉब फ़िल्टर और पोस्ट्स फ़िल्टर का पूरा सीक्रेट। जब आप जॉब्स टैब में पास्ट ट्वेंटी फोर आवर्स का फ़िल्टर लगाते हैं, तो आपका रेज़्यूमे शुरुआती तीस से पचास आवेदकों में जमा होता है, जिससे एचआर उसे तुरंत देखता है। दूसरा सबसे बड़ा तरीक़ा है पोस्ट्स फ़िल्टर। बहुत बार एचआर जॉब का लंबा फ़ॉर्म नहीं बनाते, बल्कि सीधे अपनी टाइमलाइन पर पोस्ट लिख देते हैं कि मुझे तुरंत एल टू सपोर्ट या डेवलपर चाहिए, अपना सीवी इस ईमेल पर भेजें। लिंक्डइन के सर्च बार में हायरिंग लिखकर सर्च करें और ऊपर दिए गए 'पोस्ट्स' बटन पर क्लिक करें। यहाँ आपको रिक्रूटर्स की डायरेक्ट ईमेल आईडी मिल जाएगी।",
+      
+      "पेज नंबर चार। रिक्रूटर्स को डायरेक्ट मैसेज भेजने के रेडीमेड टेम्पलेट्स। इस पेज पर एल टू टेक सपोर्ट, फुल स्टैक डेवलपर, और एसएपी कंसल्टेंट—तीनों के लिए अलग-अलग टेम्पलेट तैयार हैं। जब आप रिक्रूटर को लिंक्डइन पर कनेक्ट रिक्वेस्ट भेजें, तो 'एड अ नोट' पर क्लिक करके छोटा टेम्पलेट पेस्ट करें। और अगर रिक्रूटर की ईमेल आईडी आपके पास है, तो नीचे दिया गया पूरा ईमेल टेम्पलेट कॉपी करके भेजें। किसी भी बॉक्स के बगल में दिए कॉपी बटन पर क्लिक करते ही टेक्स्ट सीधे कॉपी हो जाएगा।",
+      
+      "पेज नंबर पाँच। मॉर्निंग रिफ्रेश हैक। आपके मन में सवाल था कि क्या सच में सिर्फ़ एक डॉट हटाने और लगाने से प्रोफ़ाइल रैंक करेगा? इसका जवाब है हाँ, बिल्कुल करेगा। नौकरी और फाउंड-इट का सर्च एल्गोरिदम यह नहीं देखता कि आपने नया क्या लिखा, वह सिर्फ यह देखता है कि प्रोफ़ाइल का लास्ट मॉडिफ़ाइड टाइम क्या है। रिक्रूटर जब एक्टिव टुडे का फ़िल्टर लगाते हैं, तो आपका प्रोफ़ाइल पहले पेज पर आ जाता है। रोज़ सुबह सवा नौ बजे ऐप खोलें, समरी में एक डॉट एडिट करके सेव करें। साथ ही अपनी रेज़्यूमे फ़ाइल का नाम हमेशा अपने रोल और नाम के साथ रखें।",
+      
+      "पेज नंबर छह। रोज़ाना का बीस मिनट का नियम। सुबह सवा नौ बजे नौकरी और फाउंड-इट पर प्रोफ़ाइल रिफ्रेश करें। साढ़े नौ बजे लिंक्डइन के पोस्ट्स फ़िल्टर में जाकर ताज़ा हायरिंग पोस्ट खोजें। पौने दस बजे पाँच रिक्रूटर्स को कनेक्ट रिक्वेस्ट के साथ हमारा नोट भेजें, या उनके ईमेल पर सीवी मेल करें। और आख़िर में जॉब्स सेक्शन में पिछले चौबीस घंटे वाले पाँच से दस जॉब्स पर ईज़ी अप्लाई कर दें। रोज़ाना सिर्फ़ यह बीस मिनट देने से तीन से पाँच दिनों में डायरेक्ट कॉल्स आना शुरू हो जाएंगे।"
+    ];
+
+    let isPlayingAudio = false;
+
+    function stopAudio() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      isPlayingAudio = false;
+      document.getElementById('audioIcon').className = 'ph-bold ph-speaker-high text-base';
+      document.getElementById('audioText').textContent = 'हिंदी में सुनें (Audio)';
+      document.getElementById('globalAudioBtn').classList.remove('bg-indigo-600', 'text-white');
+    }
+
+    function toggleAudio() {
+      if (isPlayingAudio) {
+        stopAudio();
+        return;
+      }
+
+      if (!('speechSynthesis' in window)) {
+        alert("Aapke browser me text-to-speech audio support uplabdh nahi hai.");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const narrationText = hindiAudioNarrations[currentSlide];
+      const utterance = new SpeechSynthesisUtterance(narrationText);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.95;
+
+      utterance.onstart = () => {
+        isPlayingAudio = true;
+        document.getElementById('audioIcon').className = 'ph-bold ph-stop-circle text-base text-rose-300';
+        document.getElementById('audioText').textContent = 'आवाज़ रोकें (Stop)';
+        document.getElementById('globalAudioBtn').classList.add('bg-indigo-600', 'text-white');
+      };
+
+      utterance.onend = () => {
+        stopAudio();
+      };
+
+      utterance.onerror = () => {
+        stopAudio();
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function updateCarousel() {
+      stopAudio();
+
+      slides.forEach((slide, idx) => {
+        if (idx === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      tabs.forEach((tab, idx) => {
+        if (idx === currentSlide) {
+          tab.className = "tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap bg-indigo-600 text-white shadow-lg shadow-indigo-600/30 flex items-center gap-2";
+        } else {
+          tab.className = "tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition whitespace-nowrap text-slate-400 hover:text-white hover:bg-slate-800/60 flex items-center gap-2";
+        }
+      });
+
+      dots.forEach((dot, idx) => {
+        if (idx === currentSlide) {
+          dot.className = "dot-btn w-6 h-2.5 rounded-full bg-indigo-500 transition-all";
+        } else {
+          dot.className = "dot-btn w-2.5 h-2.5 rounded-full bg-slate-700 transition-all";
+        }
+      });
+
+      currentStepBadge.textContent = String(currentSlide + 1).padStart(2, '0');
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateCarousel();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateCarousel();
+      }
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+    }
+
+    function switchTemplateTab(category) {
+      document.querySelectorAll('.template-box').forEach(el => el.classList.add('hidden'));
+      document.getElementById('content-' + category).classList.remove('hidden');
+
+      const btnSupport = document.getElementById('tab-support');
+      const btnFullstack = document.getElementById('tab-fullstack');
+      const btnSap = document.getElementById('tab-sap');
+
+      [btnSupport, btnFullstack, btnSap].forEach(btn => {
+        btn.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white transition flex items-center gap-1.5";
+      });
+
+      if (category === 'support') btnSupport.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-600 text-white transition flex items-center gap-1.5";
+      if (category === 'fullstack') btnFullstack.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-indigo-600 text-white transition flex items-center gap-1.5";
+      if (category === 'sap') btnSap.className = "text-xs font-bold px-3 py-1.5 rounded-lg bg-purple-600 text-white transition flex items-center gap-1.5";
+    }
+
+    function copyToClipboard(elementId, buttonEl) {
+      const textToCopy = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        const originalHtml = buttonEl.innerHTML;
+        buttonEl.innerHTML = '<i class="ph-bold ph-check"></i> Copied!';
+        buttonEl.classList.add('bg-emerald-600');
+
+        showToast("Template copied to clipboard!");
+
+        setTimeout(() => {
+          buttonEl.innerHTML = originalHtml;
+          buttonEl.classList.remove('bg-emerald-600');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+      toastMessage.textContent = message;
+      toast.classList.remove('translate-y-16', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-16', 'opacity-0');
+      }, 2500);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') nextSlide();
+      if (e.key === 'ArrowLeft') prevSlide();
+    });
+
+    updateCarousel();
+  </script>
+</body>
+</html>

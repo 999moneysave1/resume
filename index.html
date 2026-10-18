@@ -1268,7 +1268,7 @@
                 </div>
 
                 <!-- 7. KEY PROJECTS (NO BREAK) -->
-                <div class="no-break-group">
+                <div class="no-break-group" id="p-proj-group">
                     <div class="sec-title" id="sec-head-proj">KEY PROJECTS</div>
                     <div id="p-proj"></div>
                 </div>
@@ -1581,27 +1581,53 @@ You MUST output STRICTLY in the clean format provided.`;
         }
 
         // ==================== MASTER & LOCAL SECTION SWITCHERS ====================
+
         function loadMasterPreset(key) {
-            let p = allPresets[key];
-            if (!p) return;
+    let p = allPresets[key];
+    if (!p) return;
 
-            document.getElementById('c-title-txt').value = p.title;
-            document.getElementById('c-cont-txt').value = p.contact;
-            document.getElementById('c-sum-txt').value = p.summary;
-            document.getElementById('c-awards-txt').value = p.awards || "";
-            document.getElementById('c-edu-txt').value = p.edu || "";
-            document.getElementById('c-oth-txt').value = p.other || "";
-            document.getElementById('c-soft-txt').value = p.soft || "";
-            document.getElementById('c-lang-txt').value = p.lang || "";
+    // ==================== 1. KEY PROJECTS HIDE/SHOW ====================
+    const editorProjSec = document.getElementById('sec-ctrl-proj');
+    const previewProjSec = document.getElementById('p-proj-group');
 
-            activeExps = JSON.parse(JSON.stringify(p.experiences));
-            activeProjs = JSON.parse(JSON.stringify(p.projects));
+    // Principal और Tech Support दोनों में Projects सेक्शन को छिपाएँ
+    if (key === 'techsupport' || key === 'principal') {
+        if (editorProjSec) editorProjSec.style.display = 'none';
+        if (previewProjSec) previewProjSec.style.display = 'none';
+    } else {
+        if (editorProjSec) editorProjSec.style.display = 'block';
+        if (previewProjSec) previewProjSec.style.display = 'block';
+    }
 
-            parseSkillsStringToGrid(p.skills);
-            document.querySelectorAll('.sec-switcher-mini').forEach(sel => sel.value = 'inherit');
+    // ==================== 2. PORTFOLIO LINK HIDE/SHOW ====================
+    let contactLine = p.contact;
+    // अगर Tech Support या Principal हो, तो Portfolio वाला हिस्सा हटा दें
+    if (key === 'techsupport' || key === 'principal') {
+        contactLine = contactLine
+            .replace(/\|\s*Portfolio:[^|]*/gi, '')
+            .replace(/Portfolio:[^|]*\s*\|?/gi, '')
+            .trim();
+    }
 
-            renderEditor();
-        }
+    // बाकी डेटा लोड करें
+    document.getElementById('c-title-txt').value = p.title;
+    document.getElementById('c-cont-txt').value = contactLine;
+    document.getElementById('c-sum-txt').value = p.summary;
+    document.getElementById('c-awards-txt').value = p.awards || "";
+    document.getElementById('c-edu-txt').value = p.edu || "";
+    document.getElementById('c-oth-txt').value = p.other || "";
+    document.getElementById('c-soft-txt').value = p.soft || "";
+    document.getElementById('c-lang-txt').value = p.lang || "";
+
+    activeExps = JSON.parse(JSON.stringify(p.experiences));
+    activeProjs = JSON.parse(JSON.stringify(p.projects));
+
+    parseSkillsStringToGrid(p.skills);
+    document.querySelectorAll('.sec-switcher-mini').forEach(sel => sel.value = 'inherit');
+
+    renderEditor();
+}
+
 
         function switchSectionData(section, roleKey) {
             if (roleKey === 'inherit') {
@@ -2118,13 +2144,22 @@ ${rawJD}`;
             t.style.textAlign = document.getElementById('c-title-al').value;
 
             // Contact
-            let co = document.getElementById('p-contact');
-            let rawContact = document.getElementById('c-cont-txt').value;
-            co.innerHTML = makeContactClickable(rawContact);
+let co = document.getElementById('p-contact');
+let rawContact = document.getElementById('c-cont-txt').value;
+const currentRole = document.getElementById('preset-sel').value;
 
-            co.style.fontSize = document.getElementById('c-cont-sz').value + 'px';
-            co.style.color = document.getElementById('c-cont-cl').value;
-            co.style.textAlign = document.getElementById('c-cont-al').value;
+// अगर Tech Support या Principal सिलेक्टेड है तो प्रिव्यू में Portfolio कभी नहीं दिखेगा
+if (currentRole === 'techsupport' || currentRole === 'principal') {
+    rawContact = rawContact
+        .replace(/\|\s*Portfolio:[^|]*/gi, '')
+        .replace(/Portfolio:[^|]*\s*\|?/gi, '')
+        .trim();
+}
+
+co.innerHTML = makeContactClickable(rawContact);
+co.style.fontSize = document.getElementById('c-cont-sz').value + 'px';
+co.style.color = document.getElementById('c-cont-cl').value;
+co.style.textAlign = document.getElementById('c-cont-al').value;
 
             // Summary
             let su = document.getElementById('p-summary');

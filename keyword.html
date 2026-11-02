@@ -1,414 +1,203 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Portal Optimization Generator | Sarfraz Dashboard</title>
-    <!-- Tailwind CSS via CDN -->
+    <title>Smart Persistent Keyword Copier</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-900 text-slate-100 min-h-screen p-4 sm:p-8 font-sans">
 
-    <!-- Toast Notification Box -->
-    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-emerald-600 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 text-sm font-medium">
-        <i class="fa-solid fa-circle-check text-lg"></i>
-        <span id="toast-message">Copied to clipboard successfully!</span>
+    <div class="max-w-4xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 mb-2">
+                ⚡ Smart Persistent Job Copier
+            </h1>
+            <p class="text-slate-400 text-sm sm:text-base">
+                एक-एक क्लिक कॉपी + आपके पसंदीदा कीवर्ड्स हमेशा सेव रहेंगे (Auto-Memory Enabled)
+            </p>
+        </header>
+
+        <!-- Notification Toast -->
+        <div id="toast" class="fixed top-5 right-5 z-50 transform translate-y-[-200%] transition-all duration-300 bg-emerald-600 text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2">
+            <i class="fa-solid fa-circle-check"></i>
+            <span id="toast-msg">Copied successfully!</span>
+        </div>
+
+        <!-- Main Content Sections -->
+        <div class="space-y-6">
+
+            <!-- Section 1: Tech Support & Helpdesk -->
+            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-headset"></i> Tech Support & IT Helpdesk (L1 / L2)
+                </h2>
+                <div class="space-y-3" id="group-tech"></div>
+            </div>
+
+            <!-- Section 2: SAP SuccessFactors -->
+            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-database"></i> SAP SuccessFactors (2 Years Exp)
+                </h2>
+                <div class="space-y-3" id="group-sap"></div>
+            </div>
+
+            <!-- Section 3: Full Stack & Frontend Development -->
+            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-bold text-emerald-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-code"></i> Full Stack & Frontend Development
+                </h2>
+                <div class="space-y-3" id="group-dev"></div>
+            </div>
+
+            <!-- Section 4: BPO, KPO, Voice & Non-Voice -->
+            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-bold text-indigo-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-headset"></i> BPO, KPO, Voice & Non-Voice Support
+                </h2>
+                <div class="space-y-3" id="group-bpo"></div>
+            </div>
+
+            <!-- Section 5: School Teacher & Principal Roles -->
+            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-bold text-rose-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap"></i> School Teacher & Principal Roles
+                </h2>
+                <div class="space-y-3" id="group-edu"></div>
+            </div>
+
+            <!-- Section 6: Target Locations & Remote Prefs -->
+            <div class="bg-slate-800 rounded-xl p-5 border border-slate-700 shadow-xl">
+                <h2 class="text-xl font-bold text-purple-400 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-location-dot"></i> Target Locations & Remote Prefs
+                </h2>
+                <div class="space-y-3" id="group-loc"></div>
+            </div>
+
+        </div>
+
+        <footer class="text-center mt-12 text-slate-500 text-sm">
+            <p>Data automatically saved in browser local storage for fast everyday search.</p>
+        </footer>
     </div>
 
-    <!-- Header Section -->
-    <header class="bg-slate-800/80 backdrop-blur-md border-b border-slate-700/60 sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30">
-                    <i class="fa-solid fa-briefcase"></i>
-                </div>
-                <div>
-                    <h1 class="text-lg font-bold text-white tracking-tight">Sarfraz's Job Portal Generator</h1>
-                    <p class="text-xs text-slate-400">Optimize keywords & profiles for Remote & WFH Job Portals (Naukri, LinkedIn)</p>
-                </div>
-            </div>
-            <!-- Navigation Tabs -->
-            <nav class="flex bg-slate-900/90 p-1.5 rounded-xl border border-slate-700 space-x-1 w-full sm:w-auto justify-center">
-                <button onclick="switchTab('tech-bpo')" id="tab-tech-bpo" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 bg-indigo-600 text-white shadow-md">
-                    <i class="fa-solid fa-headset mr-1.5"></i> Tech Support & BPO
-                </button>
-                <button onclick="switchTab('sap')" id="tab-sap" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800">
-                    <i class="fa-solid fa-database mr-1.5"></i> SAP SuccessFactors
-                </button>
-                <button onclick="switchTab('dev')" id="tab-dev" class="px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800">
-                    <i class="fa-solid fa-code mr-1.5"></i> Full Stack Dev
-                </button>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-        <!-- PROFILE 1: TECH SUPPORT & BPO -->
-        <section id="panel-tech-bpo" class="profile-panel space-y-6">
-            <div class="bg-gradient-to-r from-indigo-900/40 via-slate-800 to-slate-800 border border-indigo-500/30 p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                <div class="absolute right-0 top-0 translate-x-6 -translate-y-6 w-48 h-48 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 mb-2">
-                            <i class="fa-solid fa-clock mr-1.5"></i> 2+ Years Experience
-                        </span>
-                        <h2 class="text-2xl font-bold text-white tracking-tight">Tech Support, L1/L2, Voice & Non-Voice BPO/KPO</h2>
-                        <p class="text-slate-400 text-sm mt-1">Targeting remote technical troubleshooting, customer support, and IT helpdesk roles.</p>
-                    </div>
-                    <button onclick="copyAllSection('tech-bpo')" class="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-medium transition shadow-lg shadow-indigo-600/20 flex items-center space-x-2">
-                        <i class="fa-solid fa-copy"></i>
-                        <span>Copy All Details</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Keywords Box -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-key text-indigo-400 mr-2"></i> Key Skills / Keywords
-                            </h3>
-                            <button onclick="copyText('kw-tech')" class="text-xs text-indigo-400 hover:text-indigo-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="kw-tech" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">Technical Support, L1 Support, L2 Support, Desktop Support, IT Helpdesk, Troubleshooting, Active Directory, Office 365, ServiceNow, Jira, ITIL, VPN, Hardware & Networking, BPO, Voice Process, Non-Voice Process, Customer Support, US Support, International Voice Support, Chat Support, Email Support</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Paste into Naukri/LinkedIn "Key Skills" input box.</p>
-                </div>
-
-                <!-- Destination Companies -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-building text-indigo-400 mr-2"></i> Target Companies
-                            </h3>
-                            <button onclick="copyText('comp-tech')" class="text-xs text-indigo-400 hover:text-indigo-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="comp-tech" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">Genpact, Concentrix, Teleperformance, Tech Mahindra, Wipro, Cognizant, HCL Technologies, TCS, Accenture, Alorica, Intelenet, Amazon, Dell, Televerde</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Add these under preferred employer filters if available.</p>
-                </div>
-
-                <!-- Preferred Locations & Work Mode -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-location-dot text-indigo-400 mr-2"></i> Locations & Mode
-                            </h3>
-                            <button onclick="copyText('loc-tech')" class="text-xs text-indigo-400 hover:text-indigo-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="loc-tech" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">Remote, Work from Home, Pan India, Kolkata, Gurugram, Bengaluru, Noida, Hyderabad, Pune, Mumbai</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Select "Remote / WFH" checkbox on job portals.</p>
-                </div>
-            </div>
-
-            <!-- Resume Summary / Headline Box -->
-            <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-6 shadow-lg">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                        <i class="fa-solid fa-file-lines text-indigo-400 mr-2"></i> Recommended Resume Headline & Summary
-                    </h3>
-                    <button onclick="copyText('sum-tech')" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium rounded-lg transition shadow">Copy Summary</button>
-                </div>
-                <div id="sum-tech" class="text-sm text-slate-300 bg-slate-900/60 p-4 rounded-xl border border-slate-800 leading-relaxed select-all">
-                    Results-driven Technical Support & BPO professional with 2+ years of experience specializing in L1/L2 troubleshooting, IT helpdesk support, and international voice/non-voice client handling. Adept at resolving complex hardware, software, and network issues efficiently while ensuring high customer satisfaction. Seeking Remote / Work-from-Home opportunities in tech support and customer operations.
-                </div>
-            </div>
-        </section>
-
-        <!-- PROFILE 2: SAP SUCCESSFACTORS CONSULTANT -->
-        <section id="panel-sap" class="profile-panel hidden space-y-6">
-            <div class="bg-gradient-to-r from-purple-900/40 via-slate-800 to-slate-800 border border-purple-500/30 p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                <div class="absolute right-0 top-0 translate-x-6 -translate-y-6 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30 mb-2">
-                            <i class="fa-solid fa-clock mr-1.5"></i> 2+ Years Experience
-                        </span>
-                        <h2 class="text-2xl font-bold text-white tracking-tight">SAP SuccessFactors Consultant</h2>
-                        <p class="text-slate-400 text-sm mt-1">Targeting remote SAP implementation, configuration, Employee Central, and HCM support roles.</p>
-                    </div>
-                    <button onclick="copyAllSection('sap')" class="px-4 py-2.5 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-sm font-medium transition shadow-lg shadow-purple-600/20 flex items-center space-x-2">
-                        <i class="fa-solid fa-copy"></i>
-                        <span>Copy All Details</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Keywords Box -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-key text-purple-400 mr-2"></i> Key Skills / Keywords
-                            </h3>
-                            <button onclick="copyText('kw-sap')" class="text-xs text-purple-400 hover:text-purple-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="kw-sap" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">SAP SuccessFactors, Employee Central (EC), Performance & Goals (PMGM), Employee Central Payroll, SuccessFactors Employee Central, HCM, SAP ERP, Configuration, Implementation, Business Analysis, HRIS, Data Migration, Provisioning, Workflows, Role-Based Permissions (RBP)</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Paste into Naukri/LinkedIn "Key Skills" input box.</p>
-                </div>
-
-                <!-- Destination Companies -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-building text-purple-400 mr-2"></i> Target Companies
-                            </h3>
-                            <button onclick="copyText('comp-sap')" class="text-xs text-purple-400 hover:text-purple-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="comp-sap" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">SAP Labs, Deloitte, Accenture, PwC, EY, KPMG, IBM, Capgemini, Tech Mahindra, LTIMindtree, Infosys, Wipro, Tata Consultancy Services (TCS)</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Top consulting and IT firms hiring remote SAP consultants.</p>
-                </div>
-
-                <!-- Preferred Locations & Work Mode -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-location-dot text-purple-400 mr-2"></i> Locations & Mode
-                            </h3>
-                            <button onclick="copyText('loc-sap')" class="text-xs text-purple-400 hover:text-purple-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="loc-sap" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">Remote, Work from Home, Pan India, Bengaluru, Pune, Hyderabad, Mumbai, Gurugram, Chennai</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Select "Remote / WFH" filter for global consulting projects.</p>
-                </div>
-            </div>
-
-            <!-- Resume Summary / Headline Box -->
-            <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-6 shadow-lg">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                        <i class="fa-solid fa-file-lines text-purple-400 mr-2"></i> Recommended Resume Headline & Summary
-                    </h3>
-                    <button onclick="copyText('sum-sap')" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white text-xs font-medium rounded-lg transition shadow">Copy Summary</button>
-                </div>
-                <div id="sum-sap" class="text-sm text-slate-300 bg-slate-900/60 p-4 rounded-xl border border-slate-800 leading-relaxed select-all">
-                    Dedicated SAP SuccessFactors Consultant with 2+ years of hands-on experience in Employee Central, PMGM, RBP configuration, and HRIS implementations. Proven expertise in system analysis, workflow design, and data migration supporting global enterprise clients. Seeking Remote / Work-from-Home opportunities to deliver impactful SAP HCM solutions.
-                </div>
-            </div>
-        </section>
-
-        <!-- PROFILE 3: FULL STACK WEB DEVELOPER -->
-        <section id="panel-dev" class="profile-panel hidden space-y-6">
-            <div class="bg-gradient-to-r from-emerald-900/40 via-slate-800 to-slate-800 border border-emerald-500/30 p-6 rounded-2xl shadow-xl relative overflow-hidden">
-                <div class="absolute right-0 top-0 translate-x-6 -translate-y-6 w-48 h-48 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 mb-2">
-                            <i class="fa-solid fa-clock mr-1.5"></i> 2+ Years Experience
-                        </span>
-                        <h2 class="text-2xl font-bold text-white tracking-tight">Full Stack Web Developer</h2>
-                        <p class="text-slate-400 text-sm mt-1">Targeting remote frontend, backend, and full-stack software engineering positions.</p>
-                    </div>
-                    <button onclick="copyAllSection('dev')" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-sm font-medium transition shadow-lg shadow-emerald-600/20 flex items-center space-x-2">
-                        <i class="fa-solid fa-copy"></i>
-                        <span>Copy All Details</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Keywords Box -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-key text-emerald-400 mr-2"></i> Key Skills / Keywords
-                            </h3>
-                            <button onclick="copyText('kw-dev')" class="text-xs text-emerald-400 hover:text-emerald-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="kw-dev" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">Full Stack Developer, Frontend Developer, Backend Developer, JavaScript, TypeScript, React.js, Node.js, Express.js, HTML5, CSS3, Tailwind CSS, MongoDB, SQL, RESTful APIs, Git, GitHub, Agile, Web Development</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Paste into Naukri/LinkedIn "Key Skills" input box.</p>
-                </div>
-
-                <!-- Destination Companies -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-building text-emerald-400 mr-2"></i> Target Companies
-                            </h3>
-                            <button onclick="copyText('comp-dev')" class="text-xs text-emerald-400 hover:text-emerald-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="comp-dev" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">Google, Microsoft, Amazon, Zoho, Freshworks, Postman, Razorpay, Swiggy, Zomato, TCS, Infosys, Cognizant, Product Startups, Remote-first Companies</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Top product companies and remote tech startups.</p>
-                </div>
-
-                <!-- Preferred Locations & Work Mode -->
-                <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-5 flex flex-col justify-between shadow-lg">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                                <i class="fa-solid fa-location-dot text-emerald-400 mr-2"></i> Locations & Mode
-                            </h3>
-                            <button onclick="copyText('loc-dev')" class="text-xs text-emerald-400 hover:text-emerald-300 bg-slate-900/80 px-2.5 py-1.5 rounded-lg border border-slate-700 transition">Copy</button>
-                        </div>
-                        <p id="loc-dev" class="text-xs text-slate-300 bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 leading-relaxed font-mono select-all">Remote, Work from Home, Pan India, Bengaluru, Pune, Hyderabad, NCR, Remote-First</p>
-                    </div>
-                    <p class="text-[11px] text-slate-500 mt-4">Filter by Remote & Work from Home positions.</p>
-                </div>
-            </div>
-
-            <!-- Resume Summary / Headline Box -->
-            <div class="bg-slate-800/70 border border-slate-700/80 rounded-2xl p-6 shadow-lg">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-semibold text-slate-200 text-sm flex items-center">
-                        <i class="fa-solid fa-file-lines text-emerald-400 mr-2"></i> Recommended Resume Headline & Summary
-                    </h3>
-                    <button onclick="copyText('sum-dev')" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium rounded-lg transition shadow">Copy Summary</button>
-                </div>
-                <div id="sum-dev" class="text-sm text-slate-300 bg-slate-900/60 p-4 rounded-xl border border-slate-800 leading-relaxed select-all">
-                    Innovative Full Stack Web Developer with 2+ years of experience building and deploying robust, scalable web applications using React.js, Node.js, JavaScript, and modern databases. Strong foundation in RESTful API development, responsive UI/UX, and version control. Looking for Remote / Work-from-Home roles in fast-paced engineering teams.
-                </div>
-            </div>
-        </section>
-
-        <!-- Quick Tips Footer Card -->
-        <section class="mt-12 bg-slate-800/40 border border-slate-700/60 rounded-2xl p-6 backdrop-blur-sm">
-            <h4 class="text-sm font-bold text-slate-200 flex items-center mb-3">
-                <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i> Pro-Tips for Maximizing Remote Job Calls on Naukri & LinkedIn
-            </h4>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs text-slate-400">
-                <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
-                    <strong class="text-slate-200 block mb-1">1. Update Profile Daily</strong>
-                    Modify at least one keyword or comma in your profile summary daily; this pushes your profile to the top of recruiter active searches.
-                </div>
-                <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
-                    <strong class="text-slate-200 block mb-1">2. Remote Checkboxes</strong>
-                    Always enable "Work from Home" or "Remote" in filter preferences and specify "Pan India" or major tech hubs as target locations.
-                </div>
-                <div class="bg-slate-900/50 p-4 rounded-xl border border-slate-800">
-                    <strong class="text-slate-200 block mb-1">3. Tailored Resumes</strong>
-                    Keep 3 separate versions of your resume uploaded or ready depending on whether you are applying for Tech Support, SAP, or Development.
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="mt-16 border-t border-slate-800 bg-slate-950/60 py-6 text-center text-xs text-slate-500">
-        <p>Built for Sarfraz • Ready to deploy on GitHub Pages or cPanel</p>
-    </footer>
-
-    <!-- JavaScript for Interactivity -->
     <script>
-        // Tab Switching Logic
-        function switchTab(profileId) {
-            const panels = document.querySelectorAll('.profile-panel');
-            panels.forEach(panel => panel.classList.add('hidden'));
+        const data = {
+            "group-tech": [
+                ["Technical Support Engineer", "L1 Tech Support"],
+                ["L2 Technical Support", "Desktop Support Engineer"],
+                ["IT Helpdesk Executive", "IT Troubleshooting"],
+                ["Active Directory Admin", "Office 365 Support"],
+                ["ServiceNow Ticketing", "Jira Support"],
+                ["ITIL Foundation", "VPN & Network Support"]
+            ],
+            "group-sap": [
+                ["SAP SuccessFactors Consultant", "SAP Employee Central"],
+                ["SuccessFactors Time Off", "Business Rules Configuration"],
+                ["BCUI SuccessFactors", "OData API Integration"],
+                ["SAP HCM Consultant", "SAP Support Specialist"]
+            ],
+            "group-dev": [
+                ["Full Stack Web Developer", "Frontend Developer"],
+                ["React.js Developer", "Node.js Developer"],
+                ["Next.js Developer", "Express.js Developer"],
+                ["JavaScript Programmer", "Tailwind CSS Developer"],
+                ["MongoDB Developer", "SQL Database Developer"]
+            ],
+            "group-bpo": [
+                ["International Voice Process", "US Technical Support Voice"],
+                ["Non-Voice Process Support", "Chat & Email Support Executive"],
+                ["Customer Support Executive", "KPO Back Office Operations"],
+                ["Client Handling & Sales", "International BPO Associate"]
+            ],
+            "group-edu": [
+                ["School Teacher", "Trained Graduate Teacher (TGT)"],
+                ["Post Graduate Teacher (PGT)", "School Principal / Vice Principal"],
+                ["Academic Coordinator", "Spoken English Educator"]
+            ],
+            "group-loc": [
+                ["Work from Home (WFH)", "Remote Job India"],
+                ["Pan India Remote", "Kolkata Remote Jobs"],
+                ["Ranchi Remote / Hybrid", "Jharkhand Remote Jobs"],
+                ["Durgapur / Asansol", "Gurugram / Noida Remote"]
+            ]
+        };
 
-            const activePanel = document.getElementById('panel-' + profileId);
-            if (activePanel) {
-                activePanel.classList.remove('hidden');
-            }
+        function renderSections() {
+            for (const [groupId, pairs] of Object.entries(data)) {
+                const container = document.getElementById(groupId);
+                container.innerHTML = "";
 
-            // Update Tab Button Styles
-            const tabs = ['tech-bpo', 'sap', 'dev'];
-            tabs.forEach(tab => {
-                const btn = document.getElementById('tab-' + tab);
-                if (tab === profileId) {
-                    btn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 bg-indigo-600 text-white shadow-md";
-                } else {
-                    btn.className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 text-slate-400 hover:text-white hover:bg-slate-800";
-                }
-            });
+                pairs.forEach((pair, index) => {
+                    const row = document.createElement("div");
+                    row.className = "grid grid-cols-1 sm:grid-cols-2 gap-3";
 
-            // Adjust active button theme colors if needed
-            if(profileId === 'sap') {
-                document.getElementById('tab-sap').className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 bg-purple-600 text-white shadow-md";
-            } else if(profileId === 'dev') {
-                document.getElementById('tab-dev').className = "px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 bg-emerald-600 text-white shadow-md";
+                    // Retrieve saved custom state if exists
+                    const saved1 = localStorage.getItem(`${groupId}_${index}_0`) || pair[0];
+                    const saved2 = localStorage.getItem(`${groupId}_${index}_1`) || pair[1];
+
+                    row.innerHTML = `
+                        <!-- Keyword 1 (Editable & Persistent) -->
+                        <div class="flex items-center justify-between bg-slate-900/60 p-2.5 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-all gap-2">
+                            <input type="text" value="${saved1}" oninput="saveKeyword('${groupId}', ${index}, 0, this.value)"
+                                class="bg-slate-800 text-slate-200 text-sm px-2.5 py-1.5 rounded border border-slate-700 w-full focus:outline-none focus:border-cyan-500">
+                            <button onclick="copySingle(this.previousElementSibling.value, this)"
+                                class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md active:scale-95 shrink-0">
+                                <i class="fa-regular fa-copy"></i> Copy
+                            </button>
+                        </div>
+
+                        <!-- Keyword 2 (Editable & Persistent) -->
+                        <div class="flex items-center justify-between bg-slate-900/60 p-2.5 rounded-lg border border-slate-700/50 hover:border-slate-600 transition-all gap-2">
+                            <input type="text" value="${saved2}" oninput="saveKeyword('${groupId}', ${index}, 1, this.value)"
+                                class="bg-slate-800 text-slate-200 text-sm px-2.5 py-1.5 rounded border border-slate-700 w-full focus:outline-none focus:border-cyan-500">
+                            <button onclick="copySingle(this.previousElementSibling.value, this)"
+                                class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-md text-xs font-semibold flex items-center gap-1.5 transition-all shadow-md active:scale-95 shrink-0">
+                                <i class="fa-regular fa-copy"></i> Copy
+                              </button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
             }
         }
 
-        // Toast Notification Function
+        function saveKeyword(groupId, rowIndex, colIndex, value) {
+            localStorage.setItem(`${groupId}_${rowIndex}_${colIndex}`, value);
+        }
+
+        function copySingle(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Copied: "${text}"`);
+                const originalHTML = btnElement.innerHTML;
+                btnElement.innerHTML = `<i class="fa-solid fa-check"></i> Copied!`;
+                btnElement.classList.remove('bg-blue-600', 'hover:bg-blue-500');
+                btnElement.classList.add('bg-emerald-600');
+
+                setTimeout(() => {
+                    btnElement.innerHTML = originalHTML;
+                    btnElement.classList.remove('bg-emerald-600');
+                    btnElement.classList.add('bg-blue-600', 'hover:bg-blue-500');
+                }, 1500);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
         function showToast(message) {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            toastMsg.textContent = message;
-
-            toast.classList.remove('translate-y-20', 'opacity-0');
-            toast.classList.add('translate-y-0', 'opacity-100');
-
+            const toastMsg = document.getElementById('toast-msg');
+            toastMsg.innerText = message;
+            toast.style.transform = 'translateY(0)';
             setTimeout(() => {
-                toast.classList.remove('translate-y-0', 'opacity-100');
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 2500);
+                toast.style.transform = 'translateY(-200%)';
+            }, 2000);
         }
 
-        // Copy Single Element Text
-        function copyText(elementId) {
-            const textElement = document.getElementById(elementId);
-            if(!textElement) return;
-            const textToCopy = textElement.innerText || textElement.textContent;
-
-            // Using fallback document.execCommand for iframe iframe-heavy environments
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast("Copied to clipboard!");
-            } catch (err) {
-                showToast("Failed to copy");
-            }
-            document.body.removeChild(textArea);
-        }
-
-        // Copy All Details for a Profile Section
-        function copyAllSection(profileKey) {
-            let kwId = 'kw-' + profileKey;
-            let compId = 'comp-' + profileKey;
-            let locId = 'loc-' + profileKey;
-            let sumId = 'sum-' + profileKey;
-
-            let combinedText = "KEYWORDS:\n" + document.getElementById(kwId).innerText +
-                               "\n\nTARGET COMPANIES:\n" + document.getElementById(compId).innerText +
-                               "\n\nLOCATIONS:\n" + document.getElementById(locId).innerText +
-                               "\n\nSUMMARY:\n" + document.getElementById(sumId).innerText;
-
-            const textArea = document.createElement("textarea");
-            textArea.value = combinedText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            try {
-                document.execCommand('copy');
-                showToast("All profile details copied!");
-            } catch (err) {
-                showToast("Failed to copy section");
-            }
-            document.body.removeChild(textArea);
-        }
+        window.onload = renderSections;
     </script>
 </body>
 </html>
